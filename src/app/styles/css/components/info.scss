@@ -1,0 +1,42 @@
+@use "../variables" as *;
+
+.info {
+  .title {
+    display: $fx;
+    align-items: $center;
+    justify-content: space-between;
+  }
+  
+  button {
+    border: $border;
+    border-radius: 5px;
+    cursor: $pt;
+    background: $transparent;
+    padding: 2px;
+  }
+
+  .manual {
+    border: $border;
+    border-radius: 5px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease, padding 0.5s ease, margin-bottom 0.5s ease;
+  }
+  
+  .manual.show {
+    max-height: 500px;
+    opacity: 1;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  p {
+    margin: $null;
+    color: var(--primary-color);
+  }
+
+  ol {
+    color: var(--primary-color);
+  }
+}
