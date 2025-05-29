@@ -3,7 +3,7 @@
     "paths": {
       "data/*": ["./src/data/*"],
       "public/*": ["./public/*"],
-      "utils/*": ["./src/app/utils/*"],
+      "utils/*": ["./src/app/api/utils/*"],
       "styles/*": ["./src/app/styles/*"],
       "context/*": ["./src/app/context/*"],
       "components/*": ["./src/app/components/*"]

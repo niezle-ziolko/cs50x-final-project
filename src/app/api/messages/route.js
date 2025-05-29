@@ -1,5 +1,5 @@
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { bearerHeaders } from "utils/headers";
+import { bearerHeaders } from "../utils/headers";
 import { v4 as uuidv4 } from "uuid";
 
 export async function GET(request) {
@@ -36,16 +36,16 @@ export async function GET(request) {
       const diffInMs = now - created;
 
       switch (expiresAt) {
-        case "after hour":
-          return diffInMs > (60 * 60 * 1000);
-        case "24 hours":
-          return diffInMs > (24 * 60 * 60 * 1000);
-        case "After 7 days":
-          return diffInMs > (7 * 24 * 60 * 60 * 1000);
-        case "After 30 days":
-          return diffInMs > (30 * 24 * 60 * 60 * 1000);
-        default:
-          return false;
+      case "after hour":
+        return diffInMs > (60 * 60 * 1000);
+      case "24 hours":
+        return diffInMs > (24 * 60 * 60 * 1000);
+      case "After 7 days":
+        return diffInMs > (7 * 24 * 60 * 60 * 1000);
+      case "After 30 days":
+        return diffInMs > (30 * 24 * 60 * 60 * 1000);
+      default:
+        return false;
       }
     };
 

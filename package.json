@@ -1,5 +1,5 @@
 {
-  "name": "enigma",
+	"name": "enigma",
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",
@@ -14,10 +14,10 @@
 	},
 	"dependencies": {
 		"@tailwindcss/postcss": "^4.1.7",
+		"graphql-yoga": "^5.13.5",
 		"next": "15.3.2",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
-		"sass": "^1.89.0",
 		"tailwindcss": "^4.1.7",
 		"uuid": "^11.1.0"
 	},

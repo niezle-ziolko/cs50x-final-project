@@ -1,5 +1,5 @@
+import { corsHeaders, bearerHeaders } from "./headers";
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { corsHeaders, bearerHeaders } from "../utils/headers";
 
 export async function POST(request) {
   try {
@@ -27,7 +27,7 @@ export async function POST(request) {
         headers: { "Content-Type": "application/json" }
       });
     } 
-
+    
     // Handle preflight OPTIONS request for CORS
     else if (req.method === "OPTIONS") {
       return new Response(JSON.stringify({ operation: true, response: "ok" }), {
