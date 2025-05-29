@@ -5,7 +5,7 @@ import Footer from "components/footer";
 
 import { ThemeProvider } from "context/theme-context";
 
-import "./styles/css/styles.scss";
+import "styles/globals.css";
 
 const oxygen = localFont({
   src: "./styles/fonts/oxygen.woff2",

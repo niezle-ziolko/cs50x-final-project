@@ -77,17 +77,17 @@ button {
 
 footer {
   h2 {
-    color: $blue;
+    color: #0593ff;
     font-size: 1em;
-    text-align: $center;
+    text-align: center;
   }
 
   .box {
-    margin: $null $quarter;
-    display: $fx;
-    text-align: $center;
-    justify-content: $center;
-    align-items: $center;
-    border-top: $border;
+    margin: 0 25%;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-top: 2px solid #0593ff;
   }
 }

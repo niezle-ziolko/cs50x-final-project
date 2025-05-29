@@ -1,13 +1,13 @@
 export default function Lock() {
-  const space = 30;
-  const color = "#0e6ae0";
+  const small = 15;
+  const large = 30;
 
   return(
-    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width={space} height={space}>
-      <g id="Lock">
-        <path className="cls-1" d="M19,14H13a1,1,0,0,1-1-1V10a4,4,0,0,1,8,0v3A1,1,0,0,1,19,14Zm-5-2h4V10a2,2,0,0,0-4,0Z" fill={color}/>
-        <rect className="cls-2" height="14" rx="3" ry="3" width="14" x="9" y="12" fill="#0593ff"/>
-        <path className="cls-1" d="M18,18a2,2,0,1,0-3,1.72V21a1,1,0,0,0,2,0V19.72A2,2,0,0,0,18,18Z" fill={color}/>
+    <svg className="mt-1" width={large} height={large} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <path className="fill-(--dark-blue)" d="M19,14H13a1,1,0,0,1-1-1V10a4,4,0,0,1,8,0v3A1,1,0,0,1,19,14Zm-5-2h4V10a2,2,0,0,0-4,0Z" />
+        <rect className="fill-(--blue)" width={small} height={small} rx="3" ry="3" x="9" y="12" />
+        <path className="fill-(--dark-blue)" d="M18,18a2,2,0,1,0-3,1.72V21a1,1,0,0,0,2,0V19.72A2,2,0,0,0,18,18Z" />
       </g>
     </svg>
   );

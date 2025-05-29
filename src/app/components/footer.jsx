@@ -1,12 +1,10 @@
 import Lock from "styles/icons/lock";
 
 export default function Footer() {
-  return(
+  return (
     <footer>
-      <div className="box">
-        <h2>Your secure messenger for creating one-time encrypted messages.</h2>
-        <Lock />
-      </div>
+      <h3>Your secure messenger for creating one-time encrypted messages.</h3>
+      <Lock />
     </footer>
   );
 };

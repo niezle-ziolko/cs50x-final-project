@@ -1,15 +1,12 @@
 import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
+import { loadEnv } from './src/lib/env.js';
 
-// Here we use the @cloudflare/next-on-pages next-dev module to allow us to
-// use bindings during local development (when running the application with
-// `next dev`). This function is only necessary during development and
-// has no impact outside of that. For more information see:
-// https://github.com/cloudflare/next-on-pages/blob/main/internal-packages/next-dev/README.md
+loadEnv();
 setupDevPlatform().catch(console.error);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    allowedDevOrigins: ['3000-niezleziolk-cs50xfinalp-bxqovwa2hky.ws-eu118.gitpod.io']
+  allowedDevOrigins: ['3000-niezleziolk-cs50xfinalp-o94qh5888cu.ws-eu119.gitpod.io']
 };
 
 export default nextConfig;

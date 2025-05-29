@@ -1,18 +1,22 @@
+import Link from "next/link";
+
 import ThemeButton from "./buttons/theme-button";
 
 import Logo from "styles/icons/logo";
 
-export default function Header(){
-  return(
-    <header>
-      <div className="box">
-        <div className="logo">
+export default function Header() {
+  const primary = "flex items-center";
+
+  return (
+    <header className="flex px-(--q) justify-between">
+      <Link href="/">
+        <div className={primary}>
           <Logo />
           <h1>Enigma</h1>
         </div>
-        <div className="button">
-          <ThemeButton />
-        </div>
+      </Link>
+      <div className={primary}>
+        <ThemeButton />
       </div>
     </header>
   );

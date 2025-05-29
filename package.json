@@ -1,28 +1,32 @@
 {
-	"name": "enigma",
+  "name": "enigma",
 	"version": "0.1.0",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint",
+		"lint": "next lint --fix",
 		"pages": "npx @cloudflare/next-on-pages",
-		"preview": "npm run pages:build && wrangler pages dev",
-		"deploy": "npm run pages:build && wrangler pages deploy"
+		"preview": "pnpm pages && wrangler pages dev",
+		"deploy": "pnpm pages && wrangler pages deploy"
 	},
 	"dependencies": {
+		"@tailwindcss/postcss": "^4.1.7",
 		"next": "15.3.2",
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0",
-		"sass": "^1.89.0"
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"sass": "^1.89.0",
+		"tailwindcss": "^4.1.7",
+		"uuid": "^11.1.0"
 	},
 	"devDependencies": {
 		"@cloudflare/next-on-pages": "^1.13.12",
-		"@eslint/eslintrc": "^3",
-		"eslint": "^9",
+		"@eslint/eslintrc": "^3.3.1",
+		"eslint": "^9.27.0",
 		"eslint-config-next": "15.3.2",
 		"vercel": "^41.7.8",
-		"wrangler": "^4.16.0"
+		"wrangler": "^4.16.1"
 	}
 }
