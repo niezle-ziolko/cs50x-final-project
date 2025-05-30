@@ -20,5 +20,7 @@ export const typeDefs = `
       display: Int!
       seen: Int!
     ): Message
+
+    deleteMessage(id: ID!): Boolean!
   }
 `;

@@ -6,7 +6,7 @@ setupDevPlatform().catch(console.error);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: ['3000-niezleziolk-cs50xfinalp-o94qh5888cu.ws-eu119.gitpod.io']
+  allowedDevOrigins: ['3000-niezleziolk-cs50xfinalp-xabq8ooqbda.ws-eu120.gitpod.io']
 };
 
 export default nextConfig;

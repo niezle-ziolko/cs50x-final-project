@@ -1,25 +1,28 @@
-import { createYoga, createSchema } from "graphql-yoga";
+import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { bearerHeaders } from "utils/headers";
-import { typeDefs } from "utils/type-defs";
+import { ApolloServer } from "@apollo/server";
+import { bearerHeader } from "utils/headers";
 import { resolvers } from "utils/resolvers";
+import { typeDefs } from "utils/type-defs";
 
-const schema = createSchema({
+const server = new ApolloServer({
   typeDefs,
   resolvers
 });
 
-const yoga = createYoga({
-  schema,
-  graphqlEndpoint: "/api/graphql",
-  fetchAPI: { Request, Response },
-  context: async ({ request }) => {
+const handler = startServerAndCreateNextHandler(server, {
+  context: async (request) => {
     const { env } = getRequestContext();
-    const authResponse = bearerHeaders(request, env.MESSAGE_AUTH);
-    if (authResponse) throw new Error("Unauthorized");
+
+    // Get the Authorization header
+    const authHeader = request.headers.get("Authorization");
+    const clientIps = request.headers.get("x-forwarded-for")?.split(/\s*,\s*/) || [""];
+
+    await bearerHeader(authHeader, clientIps, env);
+
     return { db: env.D1 };
   }
 });
 
-export { yoga as GET, yoga as POST };
+export { handler as GET, handler as POST };
 export const runtime = "edge";

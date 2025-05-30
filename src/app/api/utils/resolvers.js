@@ -29,6 +29,7 @@ export const resolvers = {
       return message;
     },
   },
+
   Mutation: {
     createMessage: async (_, { message, password, email, display }, context) => {
       const { db } = context;
@@ -36,7 +37,6 @@ export const resolvers = {
       const id = uuidv4();
 
       const displayCount = display !== undefined ? display : 1;
-
       const seen = 0;
 
       await db
@@ -55,6 +55,23 @@ export const resolvers = {
         display: displayCount,
         seen
       };
+    },
+
+    deleteMessage: async (_, { id }, context) => {
+      const { db } = context;
+
+      const existing = await db
+        .prepare("SELECT id FROM messages WHERE id = ?")
+        .bind(id)
+        .first();
+
+      if (!existing) {
+        return false;
+      };
+
+      await db.prepare("DELETE FROM messages WHERE id = ?").bind(id).run();
+
+      return true;
     },
   },
 };
