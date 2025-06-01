@@ -12,7 +12,6 @@ export const CREATE_MESSAGE = gql`
       password: $password
       email: $email
       display: $display
-      seen: 0
     ) {
       id
     }
@@ -21,6 +20,8 @@ export const CREATE_MESSAGE = gql`
 
 export const DELETE_MESSAGE = gql`
   mutation DeleteMessage($id: ID!) {
-    deleteMessage(id: $id)
+    deleteMessage(id: $id) {
+      message
+    }
   }
 `;

@@ -16,21 +16,24 @@
 		"@apollo/client": "^3.13.8",
 		"@apollo/server": "^4.12.1",
 		"@as-integrations/next": "^3.2.0",
-		"@tailwindcss/postcss": "^4.1.7",
+		"@tailwindcss/postcss": "^4.1.8",
 		"graphql": "^16.11.0",
 		"graphql-yoga": "^5.13.5",
+		"jose": "^6.0.11",
+		"jsonwebtoken": "^9.0.2",
 		"next": "15.3.2",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
-		"tailwindcss": "^4.1.7",
+		"tailwindcss": "^4.1.8",
 		"uuid": "^11.1.0"
 	},
 	"devDependencies": {
 		"@cloudflare/next-on-pages": "^1.13.12",
 		"@eslint/eslintrc": "^3.3.1",
-		"eslint": "^9.27.0",
+		"eslint": "^9.28.0",
 		"eslint-config-next": "15.3.2",
 		"vercel": "^41.7.8",
-		"wrangler": "^4.16.1"
-	}
+		"wrangler": "^4.18.0"
+	},
+	"packageManager": "pnpm@10.11.0+sha256.a69e9cb077da419d47d18f1dd52e207245b29cac6e076acedbeb8be3b1a67bd7"
 }

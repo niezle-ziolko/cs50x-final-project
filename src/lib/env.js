@@ -1,8 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-
-export const loadEnv = () => {
+export function loadEnv() {
   const projectDir = process.cwd();
   const wranglerJsonPath = path.join(projectDir, "wrangler.jsonc");
 

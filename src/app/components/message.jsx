@@ -3,21 +3,25 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Script from "next/script";
 
+import { decryptId, decryptMessage } from "../utils";
 import { createApolloClient } from "client/client";
 import { DELETE_MESSAGE } from "client/mutations";
-import { GET_MESSAGE,  } from "client/query";
+import { useTheme } from "context/theme-context";
+import { GET_MESSAGE } from "client/query";
 
 import Loader from "./loader";
 
 export default function Message() {
-  const [turnstileToken, setTurnstileToken] = useState(null);
-  const [message, setMessage] = useState("");
+  const { isDarkMode } = useTheme();
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState(null);
+  const [decryptedId, setDecryptedId] = useState(null);
 
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const encryptedId = searchParams.get("id");
 
   useEffect(() => {
     window.javascriptCallback = function (token) {
@@ -25,12 +29,26 @@ export default function Message() {
     };
   }, []);
 
+  // Odszyfruj ID gdy komponent się ładuje
   useEffect(() => {
-    if (!turnstileToken) return;
+    if (encryptedId) {
+      decryptId(encryptedId)
+        .then(id => {
+          setDecryptedId(id);
+        })
+        .catch(err => {
+          setError("Błąd odszyfrowywania ID: " + err.message);
+        });
+    };
+  }, [encryptedId]);
+
+  useEffect(() => {
+    if (!turnstileToken || !decryptedId) return;
 
     if (turnstileToken === "error") {
       setError("Turnstile verification failed.");
       setLoading(false);
+      
       return;
     };
 
@@ -41,13 +59,20 @@ export default function Message() {
         const client = createApolloClient(turnstileToken);
         const { data } = await client.query({
           query: GET_MESSAGE,
-          variables: { id },
+          variables: { id: decryptedId }
         });
 
-        const content = data?.getMessage?.message;
+        const encryptedContent = data?.getMessage?.message;
 
-        if (content) {
-          setMessage(content);
+        if (encryptedContent) {
+          // Odszyfruj zawartość wiadomości przed wyświetleniem
+          try {
+            const decryptedContent = await decryptMessage(encryptedContent);
+            setMessage(decryptedContent);
+          } catch (decryptError) {
+            console.error("Błąd odszyfrowywania zawartości:", decryptError);
+            setError("Błąd odszyfrowywania zawartości wiadomości: " + decryptError.message);
+          };
         } else {
           setError("Message not found.");
         };
@@ -60,17 +85,17 @@ export default function Message() {
     };
 
     fetchMessage();
-  }, [turnstileToken, id]);
+  }, [turnstileToken, decryptedId]);
 
   const handleDelete = async () => {
-    if (!turnstileToken || !id) return;
+    if (!turnstileToken || !decryptedId) return;
     setDeleting(true);
     setError("");
     try {
       const client = createApolloClient(turnstileToken);
       await client.mutate({
         mutation: DELETE_MESSAGE,
-        variables: { id },
+        variables: { id: decryptedId }, // Używamy odszyfrowanego ID
       });
 
       setMessage("The note has been deleted.");
@@ -87,7 +112,7 @@ export default function Message() {
   return (
     <div>
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
-      <div className="flex items-center justify-between h-15">
+      <div className="h-15 flex items-center justify-between">
         <h2>Notate</h2>
       </div>
 
@@ -97,7 +122,7 @@ export default function Message() {
           <textarea readOnly name="message" placeholder={loading ? "Loading..." : "No message"} value={message} />
         </div>
 
-        <div className="mb-6 flex space-x-4 items-center justify-between h-15">
+        <div className="h-15 mb-6 flex space-x-4 items-center justify-between">
           <button className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" onClick={handleDelete} disabled={loading || deleting}>
             {(loading || deleting) ? <Loader /> : "Delete note"}
           </button>
@@ -106,18 +131,18 @@ export default function Message() {
             className="cf-turnstile"
             data-sitekey={TURNSTILE_SITE_KEY}
             data-callback="javascriptCallback"
-            data-theme="dark"
+            data-theme={isDarkMode ? "dark" : "light"}
           />
 
           <div className="w-40 h-15" />
         </div>
 
         {error && (
-          <div className="text-sm text-(--red) mb-(--m)">
+          <div className="mb-(--m) text-sm text-(--red)">
             <strong>Error: {error}</strong>
           </div>
         )}
       </div>
     </div>
   );
-};
+}

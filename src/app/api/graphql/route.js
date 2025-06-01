@@ -1,9 +1,9 @@
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { ApolloServer } from "@apollo/server";
-import { bearerHeader } from "utils/headers";
-import { resolvers } from "utils/resolvers";
-import { typeDefs } from "utils/type-defs";
+import { bearerHeader } from "../utils/headers";
+import { resolvers } from "../utils/resolvers";
+import { typeDefs } from "../utils/schema";
 
 const server = new ApolloServer({
   typeDefs,
@@ -15,7 +15,7 @@ const handler = startServerAndCreateNextHandler(server, {
     const { env } = getRequestContext();
 
     // Get the Authorization header
-    const authHeader = request.headers.get("Authorization");
+    const authHeader = request.headers.get("authorization");
     const clientIps = request.headers.get("x-forwarded-for")?.split(/\s*,\s*/) || [""];
 
     await bearerHeader(authHeader, clientIps, env);

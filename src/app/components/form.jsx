@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Script from "next/script";
 
+import { useTheme } from "context/theme-context";
 import { CREATE_MESSAGE } from "client/mutations";
 import { createApolloClient } from "client/client";
 
@@ -9,6 +10,7 @@ import Info from "./info";
 import Loader from "./loader";
 
 export default function Form() {
+  const { isDarkMode } = useTheme();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -17,22 +19,31 @@ export default function Form() {
     message: "",
     display: 1,
     email: "",
-    password: ""
+    password: "",
+    confirmPassword: ""
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const convertedValue = name === 'display' ? parseInt(value, 10) : value;
+    const convertedValue = name === "display" ? parseInt(value, 10) : value;
     setFormData((prev) => ({ ...prev, [name]: convertedValue }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      
+      return;
+    };
+
     setLoading(true);
 
     const formState = new FormData(e.target);
     const turnstileToken = formState.get("cf-turnstile-response");
+    console.log(`token: ${turnstileToken}`);
 
     if (!turnstileToken || turnstileToken === "error") {
       setError("Turnstile verification failed.");
@@ -57,11 +68,11 @@ export default function Form() {
       const newId = data?.createMessage?.id;
 
       if (!newId) {
-        throw new Error("No ID returned from server");
+        throw new Error("No id returned from server");
       };
 
       setMessageId(newId);
-      setFormData({ message: "", display: 1, email: "", password: "" });
+      setFormData({ message: "", display: 1, email: "", password: "", confirmPassword: "" });
       
     } catch (err) {
       console.error(err);
@@ -81,21 +92,24 @@ export default function Form() {
     };
   };
 
+  const passwordsMatch = !formData.password || formData.password === formData.confirmPassword;
   const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY;
+  const style = "flex gap-2.5";
+  const style2 = "w-1/2";
 
   return (
     <div>
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
       {messageId ? (
         <div className="mt-(--m) mb-6">
-          <aside>
+          <section>
             <p>
               Your note is ready:{" "}
               <a href={`/message?id=${messageId}`} target="_blank" rel="noopener noreferrer">
                 {typeof window !== "undefined" ? `${window.location.origin}/message?id=${messageId}` : ""}
               </a>
             </p>
-          </aside>
+          </section>
 
           <button className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" onClick={handleCopy}>
             Copy
@@ -110,7 +124,7 @@ export default function Form() {
               <textarea name="message" onChange={handleChange} value={formData.message} placeholder="Enter message here..." required />
             </div>
 
-            <div className="mb-6 flex space-x-4 items-center justify-between h-15">
+            <div className="mb-6 flex h-15 space-x-4 items-center justify-between">
               <button className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" type="submit" disabled={loading}>
                 {loading ? <Loader /> : "Create note"}
               </button>
@@ -119,7 +133,7 @@ export default function Form() {
                 className="cf-turnstile"
                 data-sitekey={TURNSTILE_SITE_KEY}
                 data-callback="javascriptCallback"
-                data-theme="dark"
+                data-theme={isDarkMode ? "dark" : "light"}
               />
 
               <button className="w-40 py-2 px-4 text-(--blue)" type="button" onClick={() => setShowMenu((prev) => !prev)}>
@@ -133,9 +147,9 @@ export default function Form() {
               </div>
             )}
 
-            <aside className={`${showMenu ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}>
-              <div className="flex gap-2.5">
-                <div className="w-1/2">
+            <section className={`${showMenu ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}>
+              <div className={style}>
+                <div className={style2}>
                   <label>
                     <h4>Self-destruction of the note</h4>
                     <span>
@@ -151,7 +165,7 @@ export default function Form() {
                   </label>
                 </div>
 
-                <div className="w-1/2">
+                <div className={style2}>
                   <label>
                     <h4>Notification of destruction</h4>
                     <span>Email for note destruction notification</span>
@@ -166,24 +180,38 @@ export default function Form() {
                 </div>
               </div>
 
-              <div className="flex gap-2.5">
-                <div className="w-1/2">
+              <div className={style}>
+                <div className={style2}>
                   <label>
                     <h4>Set password</h4>
                     <span>Enter your own password to encrypt the note</span>
-                    <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+                    <input 
+                      type="password" 
+                      name="password" 
+                      placeholder="Password" 
+                      value={formData.password} 
+                      onChange={handleChange}
+                      style={{ borderColor: !passwordsMatch ? 'var(--red)' : '' }}
+                    />
                   </label>
                 </div>
 
-                <div className="w-1/2">
+                <div className={style2}>
                   <label>
                     <h4>Repeat password</h4>
                     <span>Confirm password</span>
-                    <input type="password" placeholder="Confirmation" />
+                    <input 
+                      type="password" 
+                      name="confirmPassword"
+                      placeholder="Confirmation" 
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      style={{ borderColor: !passwordsMatch ? 'var(--red)' : '' }}
+                    />
                   </label>
                 </div>
               </div>
-            </aside>
+            </section>
           </form>
         </div>
       )}

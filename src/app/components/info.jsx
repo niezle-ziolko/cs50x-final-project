@@ -12,7 +12,7 @@ export default function Info() {
         <h2>New Note</h2>
         <button
           onClick={() => setShowManual((prev) => !prev)}
-          className="bg-transparent p-0.5"
+          className="p-0.5 bg-transparent"
           aria-expanded={showManual}
           aria-controls="manual-content"
         >
@@ -20,7 +20,7 @@ export default function Info() {
         </button>
       </div>
 
-      <aside className={`${showManual ? "opacity-100" : "max-h-0 opacity-0 p-0 mb-0"}`}>
+      <section className={`${showManual ? "opacity-100" : "p-0 mb-0 max-h-0 opacity-0"}`}>
         <p>
           Using Enigma, you can send notes that will be automatically destroyed
           after reading.
@@ -37,7 +37,7 @@ export default function Info() {
           encrypt the note, the expiration time and activate the notification
           when it is destroyed.
         </p>
-      </aside>
+      </section>
     </div>
   );
 };

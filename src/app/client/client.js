@@ -9,7 +9,7 @@ export const createApolloClient = (token) => {
   const authLink = setContext((_, { headers }) => ({
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      "authorization": token ? `Bearer ${token}` : "",
       "content-type": "application/json"
     }
   }));

@@ -29,7 +29,7 @@
   --border: 2px solid #0593ff;
 }
 
-.dark {
+[data-theme="dark"] {
   --primary: #d8e1ef;
   --secondary: #353535;
 }
@@ -107,7 +107,7 @@
     background-color: var(--transparent);
     font-family: var(--secondary-font-family);
   }
-  aside {
+  section {
     padding: 1em;
     overflow: hidden;
     max-height: 500px;

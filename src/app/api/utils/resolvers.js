@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
+import { signJWT } from "./utils";
+
 export const resolvers = {
   Query: {
     getMessage: async (_, { id }, context) => {
@@ -10,7 +12,9 @@ export const resolvers = {
         .bind(id)
         .first();
 
-      if (!message) throw new Error("Message not found");
+      if (!message) {
+        throw new Error("Message not found");
+      };
 
       const newSeen = message.seen + 1;
 
@@ -22,20 +26,34 @@ export const resolvers = {
           .prepare("UPDATE messages SET seen = ? WHERE id = ?")
           .bind(newSeen, id)
           .run();
-
-        message.seen = newSeen;
       };
 
-      return message;
+      // Prepare data for JWT
+      const messageData = {
+        id: message.id,
+        message: message.message,
+        created_at: message.created_at,
+        password: message.password,
+        email: message.email,
+        display: message.display,
+        seen: newSeen
+      };
+
+      // Create JWT token
+      const token = await signJWT(messageData);
+
+      return {
+        message: token
+      };
     },
   },
 
   Mutation: {
     createMessage: async (_, { message, password, email, display }, context) => {
       const { db } = context;
+
       const created_at = new Date().toISOString();
       const id = uuidv4();
-
       const displayCount = display !== undefined ? display : 1;
       const seen = 0;
 
@@ -46,14 +64,16 @@ export const resolvers = {
         .bind(id, message, created_at, password, email, displayCount, seen)
         .run();
 
+      // Prepare data for JWT - only ID
+      const tokenData = {
+        id
+      };
+
+      // Create JWT token with only the message ID
+      const token = await signJWT(tokenData);
+
       return {
-        id,
-        message,
-        created_at,
-        password,
-        email,
-        display: displayCount,
-        seen
+        id: token
       };
     },
 
@@ -66,12 +86,16 @@ export const resolvers = {
         .first();
 
       if (!existing) {
-        return false;
+        return {
+          message: "Message not found"
+        };
       };
 
       await db.prepare("DELETE FROM messages WHERE id = ?").bind(id).run();
 
-      return true;
+      return {
+        message: "Message deleted successfully"
+      };
     },
   },
 };
