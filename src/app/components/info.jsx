@@ -4,6 +4,7 @@ import { useState } from "react";
 import QuestionMark from "styles/icons/question-mark";
 
 export default function Info() {
+  // State to toggle visibility of the manual/instructions section
   const [showManual, setShowManual] = useState(false);
 
   return (

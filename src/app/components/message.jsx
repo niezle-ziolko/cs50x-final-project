@@ -29,12 +29,14 @@ export default function Message() {
   const searchParams = useSearchParams();
   const encryptedId = searchParams.get("id");
 
+  // Set global callback for Turnstile to update token state on successful verification
   useEffect(() => {
     window.javascriptCallback = function (token) {
       setTurnstileToken(token);
     };
   }, []);
 
+  // When encryptedId changes, attempt to decrypt it
   useEffect(() => {
     if (encryptedId) {
       decryptId(encryptedId)
@@ -47,9 +49,11 @@ export default function Message() {
     };
   }, [encryptedId]);
 
+  // When Turnstile token and decrypted ID are available, fetch the message
   useEffect(() => {
     if (!turnstileToken || !decryptedId) return;
 
+    // Handle Turnstile verification failure
     if (turnstileToken === "error") {
       setError("Turnstile verification failed.");
       setLoading(false);
@@ -57,6 +61,7 @@ export default function Message() {
       return;
     };
 
+    // Async function to fetch encrypted message from backend
     const fetchMessage = async () => {
       setLoading(true);
       setError("");
@@ -75,24 +80,22 @@ export default function Message() {
             const decryptedContent = await decryptMessage(encryptedContent);
 
             // Check if decrypted content has a password
-            if (typeof decryptedContent === 'object' && decryptedContent.password && decryptedContent.password.trim() !== "") {
+            if (typeof decryptedContent === "object" && decryptedContent.password && decryptedContent.password.trim() !== "") {
               // Message is password-protected
               setPasswordRequired(true);
               setEncryptedMessageData(decryptedContent);
-            } else if (typeof decryptedContent === 'string') {
+            } else if (typeof decryptedContent === "string") {
               setMessage(decryptedContent);
-            } else if (typeof decryptedContent === 'object') {
+            } else if (typeof decryptedContent === "object") {
               setMessage(decryptedContent.message || JSON.stringify(decryptedContent));
             };
           } catch (decryptError) {
-            console.error("Error decrypting content:", decryptError);
-            setError("Error decrypting message content: " + decryptError.message);
+            setError("Error decrypting content: " + decryptError.message);
           };
         } else {
           setError("Message not found.");
         };
       } catch (err) {
-        console.error("GraphQL fetch error:", err);
         setError(err.message || "Error fetching message.");
       } finally {
         setLoading(false);
@@ -102,6 +105,7 @@ export default function Message() {
     fetchMessage();
   }, [turnstileToken, decryptedId]);
 
+  // Handle form submission for verifying password input
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     if (!passwordInput || !encryptedMessageData) return;
@@ -130,13 +134,14 @@ export default function Message() {
         setPasswordError("Incorrect password. Please try again.");
       };
     } catch (err) {
-      console.error("Password verification error:", err);
+      // Password incorrect: show error
       setPasswordError("Error verifying password: " + err.message);
     } finally {
       setVerifyingPassword(false);
     };
   };
 
+  // Handle deleting the message via backend mutation
   const handleDelete = async () => {
     if (!turnstileToken || !decryptedId) return;
     setDeleting(true);
@@ -145,13 +150,12 @@ export default function Message() {
       const client = createApolloClient(turnstileToken);
       await client.mutate({
         mutation: DELETE_MESSAGE,
-        variables: { id: decryptedId },
+        variables: { id: decryptedId }
       });
 
-      setMessage("The note has been deleted.");
+      setMessage("The note has been deleted."); // Inform user that note is deleted
       setPasswordRequired(false);
     } catch (err) {
-      console.error("Delete error:", err);
       setError(err.message || "Error deleting message.");
     } finally {
       setDeleting(false);
@@ -173,11 +177,7 @@ export default function Message() {
           <textarea 
             readOnly 
             name="message" 
-            placeholder={
-              loading ? "Loading..." : 
-              passwordRequired ? "Enter password to view message" : 
-              "No message"
-            } 
+            placeholder={loading ? "Loading..." : passwordRequired ? "Enter password to view message" : "No message"} 
             value={passwordRequired ? "" : message} 
           />
         </div>
@@ -221,6 +221,7 @@ export default function Message() {
                   onChange={(e) => setPasswordInput(e.target.value)}
                   placeholder="Password..."
                   disabled={verifyingPassword}
+                  className={passwordError ? "border-(--red)" : ""}
                 />
               </label>
             </div>

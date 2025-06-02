@@ -1,11 +1,12 @@
+import { Suspense } from "react";
+
+import Loader from "components/loader";
 import Message from "components/message";
 
 export default function MessagePage() {
   return (
-    <div>
-      <main>
-        <Message />
-      </main>
-    </div>
+    <Suspense fallback={<Loader />}>
+      <Message />
+    </Suspense>
   );
 };

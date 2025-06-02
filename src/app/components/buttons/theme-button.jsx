@@ -5,8 +5,9 @@ import Sun from "styles/icons/sun";
 import Moon from "styles/icons/moon";
 
 export default function ThemeButton() {
+  // Destructure dark mode state and setter function from theme context
   const { isDarkMode, setIsDarkMode } = useTheme();
-  
+  // Common style string used for positioning and transition on toggle labels
   const style = "top-1.5 absolute transition-(--transition)";
 
   return (

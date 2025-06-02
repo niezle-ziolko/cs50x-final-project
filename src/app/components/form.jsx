@@ -10,7 +10,9 @@ import Info from "./info";
 import Loader from "./loader";
 
 export default function Form() {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode } = useTheme(); // Get dark mode status from context
+
+  // Local state for error messages, loading state, menu toggle, message ID, and form fields
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -23,16 +25,19 @@ export default function Form() {
     confirmPassword: ""
   });
 
+  // Handle changes in input fields: update formData accordingly
   const handleChange = (e) => {
     const { name, value } = e.target;
     const convertedValue = name === "display" ? parseInt(value, 10) : value;
     setFormData((prev) => ({ ...prev, [name]: convertedValue }));
   };
 
+  // Handle form submission: validate, verify turnstile, send mutation
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    // Validate that passwords match if provided
     if (formData.password && formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       
@@ -41,9 +46,11 @@ export default function Form() {
 
     setLoading(true);
 
+    // Extract Cloudflare Turnstile token from form data
     const formState = new FormData(e.target);
     const turnstileToken = formState.get("cf-turnstile-response");
 
+    // Check if turnstile token is valid
     if (!turnstileToken || turnstileToken === "error") {
       setError("Turnstile verification failed.");
       setLoading(false);
@@ -52,8 +59,10 @@ export default function Form() {
     };
 
     try {
+      // Create Apollo Client instance with Turnstile token for authentication
       const client = createApolloClient(turnstileToken);
 
+      // Perform GraphQL mutation to create the message/note
       const { data } = await client.mutate({
         mutation: CREATE_MESSAGE,
         variables: {
@@ -66,10 +75,12 @@ export default function Form() {
 
       const newId = data?.createMessage?.id;
 
+      // Check if server returned a message ID
       if (!newId) {
         throw new Error("No id returned from server");
       };
 
+      // Save message ID and reset form fields
       setMessageId(newId);
       setFormData({ message: "", display: 1, email: "", password: "", confirmPassword: "" });
       
@@ -81,6 +92,7 @@ export default function Form() {
     };
   };
 
+  // Copy the message URL to clipboard when requested
   const handleCopy = async () => {
     const link = `${window.location.origin}/message?id=${messageId}`;
     
@@ -91,8 +103,11 @@ export default function Form() {
     };
   };
 
+  // Boolean indicating if passwords match or if no password set (valid)
   const passwordsMatch = !formData.password || formData.password === formData.confirmPassword;
   const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY;
+
+  // CSS utility classes for styling layout
   const style = "flex gap-2.5";
   const style2 = "w-1/2";
 
@@ -190,7 +205,7 @@ export default function Form() {
                       placeholder="Password" 
                       value={formData.password} 
                       onChange={handleChange}
-                      style={{ borderColor: !passwordsMatch ? 'var(--red)' : '' }}
+                      className={`${!passwordsMatch ? "border-(--red)" : ""}`}
                     />
                   </label>
                 </div>
@@ -205,7 +220,7 @@ export default function Form() {
                       placeholder="Confirmation" 
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      style={{ borderColor: !passwordsMatch ? 'var(--red)' : '' }}
+                      className={`${!passwordsMatch ? "border-(--red)" : ""}`}
                     />
                   </label>
                 </div>

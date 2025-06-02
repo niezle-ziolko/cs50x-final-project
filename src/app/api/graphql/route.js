@@ -1,28 +1,34 @@
-import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { createYoga, createSchema } from "graphql-yoga";
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { ApolloServer } from "@apollo/server";
-import { bearerHeader } from "../utils/headers";
-import { resolvers } from "../utils/resolvers";
-import { typeDefs } from "../utils/schema";
+import { typeDefs } from "utils/schema";
+import { resolvers } from "utils/resolvers";
+import { bearerHeader } from "utils/headers";
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers
-});
-
-const handler = startServerAndCreateNextHandler(server, {
-  context: async (request) => {
+// Initialize Yoga GraphQL server with configuration
+const yoga = createYoga({
+  graphqlEndpoint: "/api/graphql",
+  fetchAPI: { Request, Response },
+  schema: createSchema({
+    typeDefs,
+    resolvers
+  }),
+  context: async ({ request }) => {
+    // Extract environment and headers from the incoming request context
     const { env } = getRequestContext();
+    const authHeader = request.headers.get("authorization"); // Get Authorization header
+    const clientIps = request.headers.get("x-forwarded-for")?.split(/\s*,\s*/) || [""]; // Parse client IPs
 
-    // Get the Authorization header
-    const authHeader = request.headers.get("authorization");
-    const clientIps = request.headers.get("x-forwarded-for")?.split(/\s*,\s*/) || [""];
-
+    // Validate the bearer token from the Authorization header with client IPs and environment
     await bearerHeader(authHeader, clientIps, env);
 
+    // Provide database handle (D1) in the GraphQL context
     return { db: env.D1 };
-  }
+  },
 });
 
-export { handler as GET, handler as POST };
+// Export Next.js handlers for GET and POST HTTP methods
+export const GET = yoga;
+export const POST = yoga;
+
+// Specify that this code runs on the Edge runtime
 export const runtime = "edge";

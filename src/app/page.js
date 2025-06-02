@@ -1,11 +1,12 @@
+import { Suspense } from "react";
+
 import Form from "components/form";
+import Loader from "components/loader";
 
 export default function Home() {
   return (
-    <div>
-      <main>
-        <Form />
-      </main>
-    </div>
+    <Suspense fallback={<Loader />}>
+      <Form />
+    </Suspense>
   );
 };
