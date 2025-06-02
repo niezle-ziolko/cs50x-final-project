@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { signJWT } from "./utils";
+import { signJWT, hashPassword, verifyPassword } from "./utils";
 
 export const resolvers = {
   Query: {
@@ -57,11 +57,14 @@ export const resolvers = {
       const displayCount = display !== undefined ? display : 1;
       const seen = 0;
 
+      // Encrypt the password before writing to the database
+      const hashedPassword = await hashPassword(password);
+
       await db
         .prepare(
           "INSERT INTO messages (id, message, created_at, password, email, display, seen) VALUES (?, ?, ?, ?, ?, ?, ?)"
         )
-        .bind(id, message, created_at, password, email, displayCount, seen)
+        .bind(id, message, created_at, hashedPassword, email, displayCount, seen)
         .run();
 
       // Prepare data for JWT - only ID
@@ -95,6 +98,35 @@ export const resolvers = {
 
       return {
         message: "Message deleted successfully"
+      };
+    },
+
+    verifyPassword: async (_, { id, password }, context) => {
+      const { db } = context;
+
+      const message = await db
+        .prepare("SELECT password FROM messages WHERE id = ?")
+        .bind(id)
+        .first();
+
+      if (!message) {
+        return {
+          success: false,
+          message: "Message not found"
+        };
+      }
+
+      try {
+        // Compare the password you entered with the hashed password from the database
+        const isValid = await verifyPassword(password, message.password);
+
+        return {
+          message: isValid ? "Password correct" : "Invalid password"
+        };
+      } catch (error) {
+        return {
+          message: "Error verifying password"
+        };
       };
     },
   },

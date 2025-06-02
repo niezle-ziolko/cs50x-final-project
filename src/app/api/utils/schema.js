@@ -12,13 +12,8 @@ export const typeDefs = `
   }
 
   type Mutation {
-    createMessage(
-      message: String!
-      password: String
-      email: String
-      display: Int
-    ): IdResponse
-
     deleteMessage(id: ID!): MessageResponse
+    verifyPassword(id: String!, password: String!): MessageResponse!
+    createMessage(message: String!, password: String, email: String, display: Int): IdResponse
   }
 `;

@@ -17,7 +17,7 @@ export async function decryptMessage(encryptedMessage) {
     const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET);
     const { payload } = await jwtVerify(encryptedMessage, secret);
 
-    return payload.message;
+    return payload;
   } catch (error) {
     console.error("Błąd odszyfrowywania wiadomości:", error);
     throw new Error("Nieprawidłowy token wiadomości");

@@ -5,7 +5,7 @@ import Script from "next/script";
 
 import { decryptId, decryptMessage } from "../utils";
 import { createApolloClient } from "client/client";
-import { DELETE_MESSAGE } from "client/mutations";
+import { DELETE_MESSAGE, VERIFY_PASSWORD } from "client/mutations";
 import { useTheme } from "context/theme-context";
 import { GET_MESSAGE } from "client/query";
 
@@ -20,6 +20,12 @@ export default function Message() {
   const [turnstileToken, setTurnstileToken] = useState(null);
   const [decryptedId, setDecryptedId] = useState(null);
 
+  const [passwordRequired, setPasswordRequired] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [verifyingPassword, setVerifyingPassword] = useState(false);
+  const [encryptedMessageData, setEncryptedMessageData] = useState(null);
+
   const searchParams = useSearchParams();
   const encryptedId = searchParams.get("id");
 
@@ -29,7 +35,6 @@ export default function Message() {
     };
   }, []);
 
-  // Odszyfruj ID gdy komponent się ładuje
   useEffect(() => {
     if (encryptedId) {
       decryptId(encryptedId)
@@ -37,7 +42,7 @@ export default function Message() {
           setDecryptedId(id);
         })
         .catch(err => {
-          setError("Błąd odszyfrowywania ID: " + err.message);
+          setError("Error decrypting ID: " + err.message);
         });
     };
   }, [encryptedId]);
@@ -48,7 +53,7 @@ export default function Message() {
     if (turnstileToken === "error") {
       setError("Turnstile verification failed.");
       setLoading(false);
-      
+
       return;
     };
 
@@ -65,13 +70,23 @@ export default function Message() {
         const encryptedContent = data?.getMessage?.message;
 
         if (encryptedContent) {
-          // Odszyfruj zawartość wiadomości przed wyświetleniem
+          // Decrypt message content
           try {
             const decryptedContent = await decryptMessage(encryptedContent);
-            setMessage(decryptedContent);
+
+            // Check if decrypted content has a password
+            if (typeof decryptedContent === 'object' && decryptedContent.password && decryptedContent.password.trim() !== "") {
+              // Message is password-protected
+              setPasswordRequired(true);
+              setEncryptedMessageData(decryptedContent);
+            } else if (typeof decryptedContent === 'string') {
+              setMessage(decryptedContent);
+            } else if (typeof decryptedContent === 'object') {
+              setMessage(decryptedContent.message || JSON.stringify(decryptedContent));
+            };
           } catch (decryptError) {
-            console.error("Błąd odszyfrowywania zawartości:", decryptError);
-            setError("Błąd odszyfrowywania zawartości wiadomości: " + decryptError.message);
+            console.error("Error decrypting content:", decryptError);
+            setError("Error decrypting message content: " + decryptError.message);
           };
         } else {
           setError("Message not found.");
@@ -87,6 +102,41 @@ export default function Message() {
     fetchMessage();
   }, [turnstileToken, decryptedId]);
 
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (!passwordInput || !encryptedMessageData) return;
+
+    setVerifyingPassword(true);
+    setPasswordError("");
+
+    try {
+      // Verify password via backend
+      const client = createApolloClient(turnstileToken);
+
+      const { data } = await client.mutate({
+        mutation: VERIFY_PASSWORD,
+        variables: { 
+          id: decryptedId,
+          password: passwordInput 
+        }
+      });
+
+      if (data?.verifyPassword?.message === "Password correct") {
+        // Password is correct - show the message
+        setMessage(encryptedMessageData.message);
+        setPasswordRequired(false);
+        setPasswordInput("");
+      } else {
+        setPasswordError("Incorrect password. Please try again.");
+      };
+    } catch (err) {
+      console.error("Password verification error:", err);
+      setPasswordError("Error verifying password: " + err.message);
+    } finally {
+      setVerifyingPassword(false);
+    };
+  };
+
   const handleDelete = async () => {
     if (!turnstileToken || !decryptedId) return;
     setDeleting(true);
@@ -95,10 +145,11 @@ export default function Message() {
       const client = createApolloClient(turnstileToken);
       await client.mutate({
         mutation: DELETE_MESSAGE,
-        variables: { id: decryptedId }, // Używamy odszyfrowanego ID
+        variables: { id: decryptedId },
       });
 
       setMessage("The note has been deleted.");
+      setPasswordRequired(false);
     } catch (err) {
       console.error("Delete error:", err);
       setError(err.message || "Error deleting message.");
@@ -119,11 +170,24 @@ export default function Message() {
       <div>
         <div className="notebook">
           <div className="top-0 h-full left-13 absolute border-l border-(--red)" />
-          <textarea readOnly name="message" placeholder={loading ? "Loading..." : "No message"} value={message} />
+          <textarea 
+            readOnly 
+            name="message" 
+            placeholder={
+              loading ? "Loading..." : 
+              passwordRequired ? "Enter password to view message" : 
+              "No message"
+            } 
+            value={passwordRequired ? "" : message} 
+          />
         </div>
 
         <div className="h-15 mb-6 flex space-x-4 items-center justify-between">
-          <button className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" onClick={handleDelete} disabled={loading || deleting}>
+          <button
+            onClick={handleDelete} 
+            disabled={loading || deleting || passwordRequired}
+            className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" 
+          >
             {(loading || deleting) ? <Loader /> : "Delete note"}
           </button>
 
@@ -137,12 +201,44 @@ export default function Message() {
           <div className="w-40 h-15" />
         </div>
 
-        {error && (
+        {error || passwordError && (
           <div className="mb-(--m) text-sm text-(--red)">
-            <strong>Error: {error}</strong>
+            <strong>Error: {error || passwordError}</strong>
           </div>
         )}
+
+        {/* Password form - shown only when required */}
+        <section className={`${passwordRequired ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}>
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="password">
+                <h4>This message is password protected</h4>
+                <span>Enter password:</span>
+                <input
+                  type="password"
+                  id="password"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder="Password..."
+                  disabled={verifyingPassword}
+                />
+              </label>
+            </div>
+            
+            <div className="p-2">
+              <button
+                type="submit"
+                disabled={verifyingPassword || !passwordInput}
+                className="w-full py-2 px-4 bg-(--blue) text-(--gray)"
+              >
+                {verifyingPassword ? <Loader /> : "Verify password"}
+              </button>
+            </div>
+          </form>
+
+          
+        </section>
       </div>
     </div>
   );
-}
+};

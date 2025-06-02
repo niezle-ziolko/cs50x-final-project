@@ -43,7 +43,6 @@ export default function Form() {
 
     const formState = new FormData(e.target);
     const turnstileToken = formState.get("cf-turnstile-response");
-    console.log(`token: ${turnstileToken}`);
 
     if (!turnstileToken || turnstileToken === "error") {
       setError("Turnstile verification failed.");
