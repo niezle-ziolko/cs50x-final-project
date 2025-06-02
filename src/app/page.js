@@ -5,7 +5,7 @@ import Loader from "components/loader";
 
 export default function Home() {
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<div className="text-(--primary) font-bold h-126"><Loader /></div>}>
       <Form />
     </Suspense>
   );

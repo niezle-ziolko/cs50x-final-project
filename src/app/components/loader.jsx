@@ -8,7 +8,7 @@ export default function Loader() {
       {letters.map((letter, index) => (
         <div
           key={index}
-          className="inline-block animate-[obrot_2s_linear_infinite]"
+          className="inline-block animate-[turnover_2s_linear_infinite]"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
           {letter}

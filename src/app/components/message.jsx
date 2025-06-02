@@ -236,8 +236,6 @@ export default function Message() {
               </button>
             </div>
           </form>
-
-          
         </section>
       </div>
     </div>
