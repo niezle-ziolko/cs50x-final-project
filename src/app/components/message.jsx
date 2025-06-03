@@ -182,23 +182,25 @@ export default function Message() {
           />
         </div>
 
-        <div className="h-15 mb-6 flex space-x-4 items-center justify-between">
+        <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
           <button
             onClick={handleDelete} 
             disabled={loading || deleting || passwordRequired}
-            className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" 
+            className="w-full md:w-40 py-2 px-4 mr-0 mb-2 bg-(--blue) text-(--gray)" 
           >
             {(loading || deleting) ? <Loader /> : "Delete note"}
           </button>
 
-          <div
-            className="cf-turnstile"
-            data-sitekey={TURNSTILE_SITE_KEY}
-            data-callback="javascriptCallback"
-            data-theme={isDarkMode ? "dark" : "light"}
-          />
+          <div className="justify-center flex">
+            <div
+              className="cf-turnstile"
+              data-sitekey={TURNSTILE_SITE_KEY}
+              data-callback="javascriptCallback"
+              data-theme={isDarkMode ? "dark" : "light"}
+            />
+          </div>
 
-          <div className="w-40 h-15" />
+          <div className="md:w-40 md:h-15" />
         </div>
 
         {error || passwordError && (

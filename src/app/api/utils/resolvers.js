@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { signJWT, hashPassword, verifyPassword } from "./utils";
+import { signJWT, hashPassword, verifyPassword, sendDeletionEmail } from "./utils";
 
 export const resolvers = {
   Query: {
@@ -16,7 +16,7 @@ export const resolvers = {
       // If no message found, throw an error
       if (!message) {
         throw new Error("Message not found");
-      }
+      };
 
       // Increment the number of times the message has been seen
       const newSeen = message.seen + 1;
@@ -24,6 +24,12 @@ export const resolvers = {
       // If the new seen count exceeds the allowed display limit, delete the message
       if (newSeen > message.display) {
         await db.prepare("DELETE FROM messages WHERE id = ?").bind(id).run();
+        
+        // We delete the message and send an email if email is provided
+        if (message.email) {
+          await sendDeletionEmail(message.email, id);
+        };
+        
         throw new Error("Message not found");
       } else {
         // Otherwise, update the seen count in the database
@@ -31,7 +37,7 @@ export const resolvers = {
           .prepare("UPDATE messages SET seen = ? WHERE id = ?")
           .bind(newSeen, id)
           .run();
-      }
+      };
 
       // Prepare the data payload to include in the JWT token
       const messageData = {
@@ -72,7 +78,7 @@ export const resolvers = {
       let hashedPassword = null;
       if (password && password.trim() !== "") {
         hashedPassword = await hashPassword(password);
-      }
+      };
 
       // Insert the new message record into the database with all relevant fields
       await db
@@ -101,10 +107,15 @@ export const resolvers = {
       // If no message found, return an informative message
       if (!existing) {
         return { message: "Message not found" };
-      }
+      };
 
       // Delete the message from the database by ID
       await db.prepare("DELETE FROM messages WHERE id = ?").bind(id).run();
+
+      // Send an email about the deletion if there is an email
+      if (existing.email) {
+        await sendDeletionEmail(existing.email, id);
+      };
 
       // Return success confirmation message
       return { message: "Message deleted successfully" };
@@ -122,7 +133,7 @@ export const resolvers = {
       // If message not found, indicate failure
       if (!message) {
         return { success: false, message: "Message not found" };
-      }
+      };
 
       try {
         // Verify that the provided password matches the stored hashed password
@@ -133,7 +144,7 @@ export const resolvers = {
       } catch (error) {
         // If error occurs during verification, return error message
         return { message: "Error verifying password" };
-      }
+      };
     },
   },
 };

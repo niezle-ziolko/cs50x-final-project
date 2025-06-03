@@ -109,8 +109,9 @@ export default function Form() {
   const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY;
 
   // CSS utility classes for styling layout
-  const style = "flex gap-2.5";
-  const style2 = "w-1/2";
+  const button = "w-full md:w-40 py-2 px-4";
+  const style = "grid md:flex gap-2.5";
+  const style2 = "md:w-1/2";
 
   return (
     <div>
@@ -126,7 +127,7 @@ export default function Form() {
             </p>
           </section>
 
-          <button className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" onClick={handleCopy}>
+          <button className={`${button} bg-(--blue) text-(--gray)`} onClick={handleCopy}>
             Copy
           </button>
         </div>
@@ -139,19 +140,21 @@ export default function Form() {
               <textarea name="message" onChange={handleChange} value={formData.message} placeholder="Enter message here..." required />
             </div>
 
-            <div className="mb-6 flex h-15 space-x-4 items-center justify-between">
-              <button className="w-40 py-2 px-4 bg-(--blue) text-(--gray)" type="submit" disabled={loading}>
+            <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
+              <button className={`${button} mr-0 mb-2 bg-(--blue) text-(--gray)`} type="submit" disabled={loading}>
                 {loading ? <Loader /> : "Create note"}
               </button>
 
-              <div
-                className="cf-turnstile"
-                data-sitekey={TURNSTILE_SITE_KEY}
-                data-callback="javascriptCallback"
-                data-theme={isDarkMode ? "dark" : "light"}
-              />
+              <div className="justify-center flex">
+                <div
+                  className="cf-turnstile"
+                  data-sitekey={TURNSTILE_SITE_KEY}
+                  data-callback="javascriptCallback"
+                  data-theme={isDarkMode ? "dark" : "light"}
+                />
+              </div>
 
-              <button className="w-40 py-2 px-4 text-(--blue)" type="button" onClick={() => setShowMenu((prev) => !prev)}>
+              <button className={`${button} text-(--blue)`} type="button" onClick={() => setShowMenu((prev) => !prev)}>
                 Settings
               </button>
             </div>
