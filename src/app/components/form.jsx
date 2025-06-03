@@ -49,7 +49,7 @@ export default function Form() {
     // Extract Cloudflare Turnstile token from form data
     const formState = new FormData(e.target);
     const turnstileToken = formState.get("cf-turnstile-response");
-    console.log(turnstileToken)
+    console.log(turnstileToken);
 
     // Check if turnstile token is valid
     if (!turnstileToken || turnstileToken === "error") {

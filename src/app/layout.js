@@ -30,11 +30,11 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${oxygen.variable} ${comicRelief.variable}`}>
         <ThemeProvider>
-            <Header />
-            <main>
-              {children}
-            </main>
-            <Footer />
+          <Header />
+          <main>
+            {children}
+          </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

@@ -68,28 +68,28 @@ export async function sendDeletionEmail(userEmail, messageId) {
   };
 
   const brevoOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'accept': 'application/json',
-      'content-type': 'application/json',
-      'api-key': `${env.EMAIL_SECRET}`
+      "accept": "application/json",
+      "content-type": "application/json",
+      "api-key": `${env.EMAIL_SECRET}`
     },
     body: JSON.stringify(brevoBody)
   };
 
   try {
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', brevoOptions);
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", brevoOptions);
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Brevo error response:', data);
+      console.error("Brevo error response:", data);
       throw new Error(`Failed to send email: ${data.message || response.status}`);
     };
 
-    console.log('Email sent successfully:', data);
+    console.log("Email sent successfully:", data);
     return data;
   } catch (error) {
-    console.error('Email sending failed:', error);
+    console.error("Email sending failed:", error);
     throw error;
   };
 };

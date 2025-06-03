@@ -19,18 +19,20 @@
 		"enabled": true
 	},
 	"d1_databases": [
-    {
-      "binding": "D1",
-      "database_name": "cs50",
-      "database_id": "e7af7a4f-4f32-4aaa-9fe3-33db3653c0b7"
-    }
-  ],
-  "vars": {
+        {
+            "binding": "D1",
+            "database_name": "cs50",
+            "database_id": "e7af7a4f-4f32-4aaa-9fe3-33db3653c0b7"
+        }
+    ],
+    "vars": {
 	    "JWT_SECRET": "0joBg09Ui2ykIacUW1iB8fi8kQRS3NQR",
 		"SALT_SECRET": "U3h41ZjOJH",
 		"SITE_KEY": "0x4AAAAAAA8CytbRsD_4tmim",
 		"SECRET_KEY": "0x4AAAAAAA8Cypo9aDiDt4r2F23lLNjpoZs",
 		"NEXT_PUBLIC_SITE_KEY": "0x4AAAAAAA8CytbRsD_4tmim",
-		"NEXT_PUBLIC_JWT_SECRET": "0joBg09Ui2ykIacUW1iB8fi8kQRS3NQR"
+		"NEXT_PUBLIC_JWT_SECRET": "0joBg09Ui2ykIacUW1iB8fi8kQRS3NQR",
+		"NODE_VERSION": "24.1.0",
+        "PNPM_VERSION": "10.9.0"
 	}
 }
