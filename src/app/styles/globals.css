@@ -1,53 +1,56 @@
 @import "tailwindcss";
 
-@layer components {
-  @theme {
-    --screen: 765px;
-  }
+@theme {
+  --screen: 765px;
+}
 
-  :root {
-    --white: #fff;
-    --black: #000;
-    --red: #bb3131;
-    --blue: #0593ff;
-    --gray: #d8e1ef;
-    --orange: #fa9c1b;
-    --primary: #353535;
-    --secondary: #d8e1ef;
-    --transparent: #0000;
-    --dark-blue: #0e6ae0;
+:root {
+  --white: #fff;
+  --black: #000;
+  --red: #bb3131;
+  --blue: #0593ff;
+  --gray: #d8e1ef;
+  --orange: #fa9c1b;
+  --primary: #353535;
+  --secondary: #d8e1ef;
+  --transparent: #0000;
+  --dark-blue: #0e6ae0;
 
-    --bld: bold;
+  --s: solid;
+  --bld: bold;
 
-    --fx: flex;
-    --nn: none;
-    --hdd: hidden;
-    --ctr: center;
+  --fx: flex;
+  --nn: none;
+  --hdd: hidden;
+  --ctr: center;
+  --abs: absolute;
 
-    --q: 25%;
-    --f: 100%;
-    --null: 0;
-    --o: 1rem;
-    --h: .5rem;
-    --m: 1.5rem;
-    --mb: .25rem;
-    --sm: 1.2rem;
-    --t: .125rem;
-    --fs: .875rem;
-    --radius: .375rem;
+  --q: 25%;
+  --f: 100%;
+  --null: 0;
+  --o: 1rem;
+  --h: .5rem;
+  --m: 1.5rem;
+  --mb: .25rem;
+  --sm: 1.2rem;
+  --t: .125rem;
+  --th: 12.5rem;
+  --fs: .875rem;
+  --radius: .375rem;
 
-    --margin: .625rem var(--null);
+  --margin: .625rem var(--null);
 
-    --transition: all .5s;
+  --transition: all .5s;
 
-    --border: var(--t) solid var(--blue);
-  }
+  --border: var(--t) var(--s) var(--blue);
+}
 
-  [data-theme="dark"] {
-    --primary: #d8e1ef;
-    --secondary: #353535;
-  }
+[data-theme="dark"] {
+  --primary: #d8e1ef;
+  --secondary: #353535;
+}
 
+@layer base {
   body {
     max-width: 100vw;
     margin: var(--null);
@@ -182,22 +185,6 @@
     justify-content: var(--ctr);
     border-radius: var(--radius);
   }
-  
-  .notebook {
-    position: relative;
-    padding-left: 4.5rem;
-    line-height: var(--sm);
-    padding-top: var(--sm);
-    box-sizing: border-box;
-    margin-bottom: var(--m);
-    border-radius: var(--h);
-    padding-right: var(--h);
-    padding-bottom: var(--h);
-    background-color: var(--white);
-    background-size: var(--f) var(--sm);
-    box-shadow: var(--nn) .0625rem var(--t) var(--nn) rgba(0, 0, 0, 0.05);
-    background-image: linear-gradient(#f5f5f0 1.1rem, #ccc var(--sm));
-  }
 
   @media (width <= 48rem) {
     main {
@@ -232,23 +219,108 @@
       font-size: var(--h);
     }
   }
+}
 
-  @keyframes turnover {
-    0% {
-      transform: rotateX(0);
-    }
-    12.5% {
-      transform: rotateX(90deg);
-    }
-    25% {
-      transform: rotateX(180deg);
-    }
-    37.5% {
-      transform: rotateX(270deg);
-    }
-    50%,
-    100% {
-      transform: rotateX(360deg);
-    }
+@layer components {
+  .notebook {
+    position: relative;
+    padding-left: 4.5rem;
+    line-height: var(--sm);
+    padding-top: var(--sm);
+    box-sizing: border-box;
+    margin-bottom: var(--m);
+    border-radius: var(--h);
+    padding-right: var(--h);
+    padding-bottom: var(--h);
+    background-color: var(--white);
+    background-size: var(--f) var(--sm);
+    box-shadow: var(--nn) .0625rem var(--t) var(--nn) rgba(0, 0, 0, 0.05);
+    background-image: linear-gradient(#f5f5f0 1.1rem, var(--gray) var(--sm));
+  }
+
+  .github .box {
+    z-index: 2;
+    position: fixed;
+    width: var(--th);
+    height: var(--th);
+    right: var(--null);
+    bottom: var(--null);
+    overflow: var(--hdd);
+  }
+
+  .github .box div, .github .box div a {
+    display: var(--fx);
+    flex-direction: column;
+    align-items: var(--ctr);
+  }
+
+  .github .box div {
+    z-index: 1;
+    width: var(--f);
+    height: var(--f);
+    top: var(--null);
+    right: var(--null);
+    position: var(--abs);
+    justify-content: flex-end;
+    transform: rotate(-45deg);
+  }
+
+  .github .box:after {
+    content: "";
+    display: block;
+    left: var(--null);
+    right: var(--null);
+    bottom: var(--null);
+    z-index: var(--null);
+    position: var(--abs);
+    border-bottom: var(--th) var(--s) #343535;
+    border-top: var(--th) var(--s) var(--transparent);
+    border-left: var(--th) var(--s) var(--transparent);
+  }
+
+  .github .box div a {
+    color: var(--white);
+    font-size: var(--o);
+    font-family: monospace;
+    text-decoration: var(--nn);
+    padding: 3px 25px 25px 25px;
+    -webkit-text-decoration: var(--nn);
+    margin: var(--null) var(--null) -12.8px;
+    transition: color .15s cubic-bezier(1,-.115,.975,.855);
+  }
+
+  .github .box div a:focus, .github .box div a:hover {
+    color: var(--gray);
+  }
+
+  .github p {
+    color: currentColor;
+    margin-top: var(--o);
+    margin-bottom: var(--o);
+  }
+
+  .github .icon {
+    width: 2rem;
+    height: 2rem;
+    fill: currentColor;
+  }
+}
+
+@keyframes turnover {
+  0% {
+    transform: rotateX(0);
+  }
+  12.5% {
+    transform: rotateX(90deg);
+  }
+  25% {
+    transform: rotateX(180deg);
+  }
+  37.5% {
+    transform: rotateX(270deg);
+  }
+  50%,
+  100% {
+    transform: rotateX(360deg);
   }
 }
