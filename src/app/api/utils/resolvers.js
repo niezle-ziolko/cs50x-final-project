@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { signJWT, hashPassword, verifyPassword, sendDeletionEmail } from "./utils";
+import { signJWT, hashPassword, verifyPassword } from "./utils";
 
 export const resolvers = {
   Query: {
@@ -24,11 +24,6 @@ export const resolvers = {
       // If the new seen count exceeds the allowed display limit, delete the message
       if (newSeen > message.display) {
         await db.prepare("DELETE FROM messages WHERE id = ?").bind(id).run();
-        
-        // We delete the message and send an email if email is provided
-        if (message.email) {
-          await sendDeletionEmail(message.email, id);
-        };
         
         throw new Error("Message not found");
       } else {
@@ -111,11 +106,6 @@ export const resolvers = {
 
       // Delete the message from the database by ID
       await db.prepare("DELETE FROM messages WHERE id = ?").bind(id).run();
-
-      // Send an email about the deletion if there is an email
-      if (existing.email) {
-        await sendDeletionEmail(existing.email, id);
-      };
 
       // Return success confirmation message
       return { message: "Message deleted successfully" };
