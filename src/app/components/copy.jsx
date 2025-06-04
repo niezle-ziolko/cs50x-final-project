@@ -12,7 +12,7 @@ export default function Copy() {
 
   useEffect(() => {
     if (messageId && typeof window !== "undefined") {
-      setMessageLink(`${window.location.origin}/message?id=${messageId}`);
+      setMessageLink(`${window.location.origin}/notate?id=${messageId}`);
     }
   }, [messageId]);
 
@@ -54,7 +54,7 @@ export default function Copy() {
           onClick={handleViewMessage}
           className={`${button} text-(--blue)`}
         >
-            View Message
+          View Message
         </button>
 
         <button
@@ -62,7 +62,7 @@ export default function Copy() {
           onClick={() => router.push("/")}
           className={`${button} text-(--blue)`}
         >
-              New notate
+          New notate
         </button>
       </div>
     </div>

@@ -1,32 +1,36 @@
-import { createYoga, createSchema } from "graphql-yoga";
+import { ApolloServer } from "@apollo/server";
+import { startServerAndCreateCloudflareWorkersHandler } from "@as-integrations/cloudflare-workers";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { typeDefs } from "utils/schema";
 import { resolvers } from "utils/resolvers";
 import { bearerHeader } from "utils/headers";
 
-// Initialize Yoga GraphQL server with configuration
-const yoga = createYoga({
-  graphqlEndpoint: "/api/graphql",
-  fetchAPI: { Request, Response },
-  schema: createSchema({
-    typeDefs,
-    resolvers
-  }),
+// Creating the GraphQL schema
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+
+// Creating the Apollo Server instance
+const server = new ApolloServer({
+  schema,
+});
+
+// Creating the handler for the Cloudflare Workers environment
+const handler = startServerAndCreateCloudflareWorkersHandler(server, {
   context: async ({ request }) => {
-    // Extract environment and headers from the incoming request context
     const { env } = await getCloudflareContext({ async: true });
 
-    const authHeader = request.headers.get("authorization"); // Get Authorization header
-    const clientIps = request.headers.get("x-forwarded-for")?.split(/\s*,\s*/) || [""]; // Parse client IPs
+    const authHeader = request.headers.get("authorization");
+    const clientIps = request.headers.get("x-forwarded-for")?.split(/\s*,\s*/) || [""];
 
-    // Validate the bearer token from the Authorization header with client IPs and environment
     await bearerHeader(authHeader, clientIps, env);
 
-    // Provide database handle (D1) in the GraphQL context
     return { db: env.D1 };
   },
 });
 
-// Export Next.js handlers for GET and POST HTTP methods
-export const GET = yoga;
-export const POST = yoga;
+// Export handler for GET and POST methods
+export const GET = handler;
+export const POST = handler;
