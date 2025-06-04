@@ -1,9 +1,10 @@
-import { SignJWT } from "jose";
+import { SignJWT, EncryptJWT, jwtDecrypt } from "jose";
 import { getRequestContext } from "@cloudflare/next-on-pages";
+
+const { env } = getRequestContext();
 
 // JWT signing/encryption key - should be in environment variables in production
 const getJWTSecret = () => {
-  const { env } = getRequestContext();
   const secret = env.JWT_SECRET;
 
   if (!secret) {
@@ -26,11 +27,46 @@ export async function signJWT(payload) {
   return jwt;
 };
 
+// Ensure the key has the appropriate length (32 bytes for A256GCM)
+const normalizeKey = (key) => {
+  if (key.length < 32) {
+    return key.padEnd(32, '0');
+  };
+
+  return key.substring(0, 32);
+};
+
+const ENCRYPTION_SECRET = new TextEncoder().encode(normalizeKey(env.ENCRYPTION_KEY));
+
+export async function encryptMessage(text) {
+  try {
+    const jwt = await new EncryptJWT({ msg: text })
+      .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+      .setIssuedAt()
+      .encrypt(ENCRYPTION_SECRET);
+    
+    return jwt;
+  } catch (error) {
+    console.error('Encryption error:', error);
+    throw new Error('Encryption failed: ' + error.message);
+  };
+};
+
+export async function decryptMessage(encryptedJWT) {
+  try {
+    const { payload } = await jwtDecrypt(encryptedJWT, ENCRYPTION_SECRET);
+
+    return payload.msg;
+  } catch (error) {
+    console.error('Decryption error:', error);
+    throw new Error('Decryption failed: ' + error.message);
+  };
+};
+
 // Function to hash password using Web Crypto API with fixed salt
 export async function hashPassword(password) {
   const encoder = new TextEncoder();
   // We use a fixed salt for the same password to always get the same hash
-  const { env } = getRequestContext();
   const salt = env.SALT_SECRET;
   const data = encoder.encode(password + salt);
   const hash = await crypto.subtle.digest("SHA-256", data);
@@ -49,7 +85,6 @@ export async function verifyPassword(inputPassword, hashedPassword) {
 
 // Function for send deleting notification
 export async function sendDeletionEmail(userEmail, messageId) {
-  const { env } = getRequestContext();
 
   const brevoBody = {
     sender: {

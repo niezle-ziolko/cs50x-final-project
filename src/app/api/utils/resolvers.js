@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { signJWT, hashPassword, verifyPassword, sendDeletionEmail } from "./utils";
+import { signJWT, encryptMessage, decryptMessage, hashPassword, verifyPassword, sendDeletionEmail } from "./utils";
 
 export const resolvers = {
   Query: {
@@ -25,7 +25,7 @@ export const resolvers = {
       if (newSeen > message.display) {
         await db.prepare("DELETE FROM messages WHERE id = ?").bind(id).run();
         
-        // We delete the message and send an email if email is provided
+        // Delete the message and send an email if email is provided
         if (message.email) {
           await sendDeletionEmail(message.email, id);
         };
@@ -39,10 +39,18 @@ export const resolvers = {
           .run();
       };
 
+      // Decrypt the message before returning it
+      let decryptedMessage;
+      try {
+        decryptedMessage = await decryptMessage(message.message);
+      } catch (error) {
+        throw new Error("Failed to decrypt message");
+      }
+
       // Prepare the data payload to include in the JWT token
       const messageData = {
         id: message.id,
-        message: message.message,
+        message: decryptedMessage, // Use the decrypted message
         created_at: message.created_at,
         password: message.password,
         email: message.email,
@@ -80,12 +88,21 @@ export const resolvers = {
         hashedPassword = await hashPassword(password);
       };
 
+      // Encrypt the message before saving it to the database
+      let encryptedMessage;
+      try {
+        encryptedMessage = await encryptMessage(message);
+      } catch (error) {
+        throw new Error("Failed to encrypt message");
+      }
+
       // Insert the new message record into the database with all relevant fields
+      // Using the encrypted message
       await db
         .prepare(
           "INSERT INTO messages (id, message, created_at, password, email, display, seen) VALUES (?, ?, ?, ?, ?, ?, ?)"
         )
-        .bind(id, message, created_at, hashedPassword, email, displayCount, seen)
+        .bind(id, encryptedMessage, created_at, hashedPassword, email, displayCount, seen)
         .run();
 
       // Sign a JWT token with the message ID to return as confirmation

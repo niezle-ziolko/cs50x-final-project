@@ -1,6 +1,6 @@
 "use client";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
 import Script from "next/script";
 
 import { decryptId, decryptMessage } from "../utils";
@@ -12,7 +12,9 @@ import { GET_MESSAGE } from "client/query";
 import Loader from "./loader";
 
 export default function Message() {
+  const router = useRouter();
   const { isDarkMode } = useTheme();
+  
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,9 @@ export default function Message() {
   const [passwordError, setPasswordError] = useState("");
   const [verifyingPassword, setVerifyingPassword] = useState(false);
   const [encryptedMessageData, setEncryptedMessageData] = useState(null);
+
+  // Ref to password form section
+  const passwordSectionRef = useRef(null);
 
   const searchParams = useSearchParams();
   const encryptedId = searchParams.get("id");
@@ -48,6 +53,32 @@ export default function Message() {
         });
     };
   }, [encryptedId]);
+
+  // Automatic scroll to password form
+  useEffect(() => {
+    if (passwordRequired && passwordSectionRef.current) {
+      // Use setTimeout to allow time for element rendering
+      setTimeout(() => {
+        // Slow scroll with longer duration
+        const targetElement = passwordSectionRef.current;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - (window.innerHeight / 2) + (targetElement.offsetHeight / 2);
+        
+        // Smooth scroll with controlled speed
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth"
+        });
+        
+        // Focus on password field after scroll completion
+        setTimeout(() => {
+          const passwordInput = passwordSectionRef.current.querySelector("#password");
+          if (passwordInput) {
+            passwordInput.focus();
+          }
+        }, 800); // Delay for smooth transition
+      }, 200);
+    }
+  }, [passwordRequired]);
 
   // When Turnstile token and decrypted ID are available, fetch the message
   useEffect(() => {
@@ -163,7 +194,10 @@ export default function Message() {
   };
 
   const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY;
-
+  
+  // CSS utility classes for styling layout
+  const button = "w-full md:w-40 py-2 px-4";
+  
   return (
     <div>
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
@@ -186,7 +220,7 @@ export default function Message() {
           <button
             onClick={handleDelete} 
             disabled={loading || deleting || passwordRequired}
-            className="w-full md:w-40 py-2 px-4 mr-0 mb-2 bg-(--blue) text-(--gray)" 
+            className={`${button} mr-0 mb-2 bg-(--blue) text-(--gray)`} 
           >
             {(loading || deleting) ? <Loader /> : "Delete note"}
           </button>
@@ -200,7 +234,15 @@ export default function Message() {
             />
           </div>
 
-          <div className="md:w-40 md:h-15" />
+          <div className="md:w-40 md:h-15">
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className={`${button} text-(--blue)`}
+            >
+              New notate
+            </button>
+          </div>
         </div>
 
         {error || passwordError && (
@@ -210,7 +252,10 @@ export default function Message() {
         )}
 
         {/* Password form - shown only when required */}
-        <section className={`${passwordRequired ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}>
+        <section 
+          ref={passwordSectionRef}
+          className={`${passwordRequired ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}
+        >
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
               <label htmlFor="password">

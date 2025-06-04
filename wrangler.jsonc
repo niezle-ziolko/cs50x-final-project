@@ -28,6 +28,7 @@
     "vars": {
 	    "JWT_SECRET": "0joBg09Ui2ykIacUW1iB8fi8kQRS3NQR",
 		"SALT_SECRET": "U3h41ZjOJH",
+		"ENCRYPTION_KEY": "7k9m2p5s8v0y3w6z9c2f5h8k1n4q7t0w",
 		"SITE_KEY": "0x4AAAAAAA8CytbRsD_4tmim",
 		"SECRET_KEY": "0x4AAAAAAA8Cypo9aDiDt4r2F23lLNjpoZs",
 		"NEXT_PUBLIC_SITE_KEY": "0x4AAAAAAA8CytbRsD_4tmim",
