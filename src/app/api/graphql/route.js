@@ -1,5 +1,5 @@
 import { createYoga, createSchema } from "graphql-yoga";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { typeDefs } from "utils/schema";
 import { resolvers } from "utils/resolvers";
 import { bearerHeader } from "utils/headers";
@@ -14,7 +14,8 @@ const yoga = createYoga({
   }),
   context: async ({ request }) => {
     // Extract environment and headers from the incoming request context
-    const { env } = getRequestContext();
+    const { env } = await getCloudflareContext({ async: true });
+
     const authHeader = request.headers.get("authorization"); // Get Authorization header
     const clientIps = request.headers.get("x-forwarded-for")?.split(/\s*,\s*/) || [""]; // Parse client IPs
 
@@ -29,6 +30,3 @@ const yoga = createYoga({
 // Export Next.js handlers for GET and POST HTTP methods
 export const GET = yoga;
 export const POST = yoga;
-
-// Specify that this code runs on the Edge runtime
-export const runtime = "edge";

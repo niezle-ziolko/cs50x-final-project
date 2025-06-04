@@ -82,8 +82,8 @@ export default function Form() {
         throw new Error("No id returned from server");
       };
 
-      // Redirect to /link page with the message ID as query parameter
-      router.push(`/link?id=${newId}`);
+      // Redirect to /created page with the message ID as query parameter
+      router.push(`/created?id=${newId}`);
       
     } catch (err) {
       console.error(err);

@@ -1,7 +1,7 @@
 import { SignJWT, EncryptJWT, jwtDecrypt } from "jose";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-const { env } = getRequestContext();
+const { env } = await getCloudflareContext({ async: true });
 
 // JWT signing/encryption key - should be in environment variables in production
 const getJWTSecret = () => {
@@ -30,7 +30,7 @@ export async function signJWT(payload) {
 // Ensure the key has the appropriate length (32 bytes for A256GCM)
 const normalizeKey = (key) => {
   if (key.length < 32) {
-    return key.padEnd(32, '0');
+    return key.padEnd(32, "0");
   };
 
   return key.substring(0, 32);
@@ -41,14 +41,14 @@ const ENCRYPTION_SECRET = new TextEncoder().encode(normalizeKey(env.ENCRYPTION_K
 export async function encryptMessage(text) {
   try {
     const jwt = await new EncryptJWT({ msg: text })
-      .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+      .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
       .setIssuedAt()
       .encrypt(ENCRYPTION_SECRET);
     
     return jwt;
   } catch (error) {
-    console.error('Encryption error:', error);
-    throw new Error('Encryption failed: ' + error.message);
+    console.error("Encryption error:", error);
+    throw new Error("Encryption failed: " + error.message);
   };
 };
 
@@ -58,8 +58,8 @@ export async function decryptMessage(encryptedJWT) {
 
     return payload.msg;
   } catch (error) {
-    console.error('Decryption error:', error);
-    throw new Error('Decryption failed: ' + error.message);
+    console.error("Decryption error:", error);
+    throw new Error("Decryption failed: " + error.message);
   };
 };
 

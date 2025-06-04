@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function LinkPage() {
+export default function Copy() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [messageLink, setMessageLink] = useState("");
@@ -29,11 +29,6 @@ export default function LinkPage() {
     };
   };
 
-  // Navigate to home page to create new note
-  const handleNewNote = () => {
-    router.push("/");
-  };
-
   // Navigate to the created message
   const handleViewMessage = () => {
     if (messageLink) {
@@ -43,22 +38,6 @@ export default function LinkPage() {
 
   // CSS utility classes for styling layout
   const button = "w-full md:w-40 py-2 px-4 mr-0 mb-2";
-
-  if (!messageId) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl mb-4">No message ID found</h2>
-          <button 
-            onClick={handleNewNote}
-            className={`${button} bg-(--blue) text-(--gray) hover:opacity-80`}
-          >
-            Create New Note
-          </button>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="mt-(--m) mb-6">
