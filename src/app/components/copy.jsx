@@ -40,7 +40,7 @@ export default function Copy() {
   const button = "w-full md:w-40 py-2 px-4 mr-0 mb-2";
 
   return (
-    <div className="mt-(--m) mb-6">
+    <div className="mt-(--oh) mb-6">
       <section>
         <p>Your note is ready!</p>
       </section>

@@ -9,12 +9,12 @@ import { bearerHeader } from "utils/headers";
 // Creating the GraphQL schema
 const schema = makeExecutableSchema({
   typeDefs,
-  resolvers,
+  resolvers
 });
 
 // Creating the Apollo Server instance
 const server = new ApolloServer({
-  schema,
+  schema
 });
 
 // Creating the handler for the Cloudflare Workers environment

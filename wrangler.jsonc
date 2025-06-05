@@ -7,9 +7,6 @@
 		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
-	"build": {
-        "command": "pnpm app"
-    },
 	"dev": {
 		"ip": "127.0.0.1",
     	"port": 3000,

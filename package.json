@@ -7,7 +7,7 @@
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"lint": "next lint --fix",
-		"app": "opennextjs-cloudflare build",
+		"prod": "opennextjs-cloudflare build",
 		"deploy": "opennextjs-cloudflare deploy",
 		"preview": "opennextjs-cloudflare preview",
 		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
@@ -32,5 +32,6 @@
 		"eslint-config-next": "15.3.3",
 		"tailwindcss": "^4",
 		"wrangler": "^4.19.1"
-	}
+	},
+	"packageManager": "pnpm@10.11.0+sha256.a69e9cb077da419d47d18f1dd52e207245b29cac6e076acedbeb8be3b1a67bd7"
 }

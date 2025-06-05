@@ -5,7 +5,7 @@ import { setContext } from "@apollo/client/link/context";
 export const createApolloClient = (token) => {
   // Create an HTTP link to the GraphQL endpoint
   const httpLink = createHttpLink({
-    uri: "/api/graphql" // GraphQL server endpoint
+    uri: "/api/Sf19GHAdWc" // GraphQL server endpoint
   });
 
   // Middleware to set the HTTP headers, including authorization if token is provided

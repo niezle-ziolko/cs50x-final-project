@@ -246,7 +246,7 @@ export default function Message() {
         </div>
 
         {error || passwordError && (
-          <div className="mb-(--m) text-sm text-(--red)">
+          <div className="mb-(--oh) text-sm text-(--red)">
             <strong>Error: {error || passwordError}</strong>
           </div>
         )}
