@@ -21,7 +21,7 @@ export default function Info() {
         </button>
       </div>
 
-      <section className={`${showManual ? "opacity-100" : "p-0 mb-0 max-h-0 opacity-0"}`}>
+      <section className={`${showManual ? "opacity-100" : "p-(--n) mb-(--n) max-h-(--n) opacity-(--n)"}`}>
         <p>
           Using Enigma, you can send notes that will be automatically destroyed
           after reading.

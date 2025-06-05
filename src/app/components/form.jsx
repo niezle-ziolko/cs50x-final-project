@@ -98,7 +98,7 @@ export default function Form() {
   const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY;
 
   // CSS utility classes for styling layout
-  const button = "w-full md:w-40 py-2 px-4";
+  const button = "w-(--fp) md:w-40 py-2 px-4";
   const style = "grid md:flex gap-2.5";
   const style2 = "md:w-1/2";
 
@@ -109,12 +109,12 @@ export default function Form() {
         <Info />
         <form onSubmit={handleSubmit}>
           <div className="notebook">
-            <div className="top-0 h-full left-13 absolute border-l border-(--red)" />
+            <div className="top-(--n) h-(--fp) left-13 absolute border-l border-(--r)" />
             <textarea name="message" onChange={handleChange} value={formData.message} placeholder="Enter message here..." required />
           </div>
 
           <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
-            <button className={`${button} mr-0 mb-2 bg-(--blue) text-(--gray)`} type="submit" disabled={loading}>
+            <button className={`${button} mr-(--n) mb-2 bg-(--bl) text-(--g)`} type="submit" disabled={loading}>
               {loading ? <Loader /> : "Create note"}
             </button>
 
@@ -127,22 +127,22 @@ export default function Form() {
               />
             </div>
 
-            <button className={`${button} text-(--blue)`} type="button" onClick={() => setShowMenu((prev) => !prev)}>
+            <button className={`${button} text-(--bl)`} type="button" onClick={() => setShowMenu((prev) => !prev)}>
               Settings
             </button>
           </div>
 
           {error && (
-            <div className="mb-6 text-sm text-(--red)">
+            <div className="mb-6 text-sm text-(--r)">
               <strong>Error: {error}</strong>
             </div>
           )}
 
-          <section className={`${showMenu ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}>
+          <section className={`${showMenu ? "opacity-100" : "mb-(--n) p-(--n) max-h-(--n) opacity-(--n)"}`}>
             <div className={style}>
               <div className={style2}>
                 <label>
-                  <h4>Self-destruction of the note</h4>
+                  <h3>Self-destruction of the note</h3>
                   <span>
                     Set the time after which the note is to be destroyed
                   </span>
@@ -158,7 +158,7 @@ export default function Form() {
 
               <div className={style2}>
                 <label>
-                  <h4>Notification of destruction</h4>
+                  <h3>Notification of destruction</h3>
                   <span>Email for note destruction notification</span>
                   <input
                     type="email"
@@ -174,7 +174,7 @@ export default function Form() {
             <div className={style}>
               <div className={style2}>
                 <label>
-                  <h4>Set password</h4>
+                  <h3>Set password</h3>
                   <span>Enter your own password to encrypt the note</span>
                   <input 
                     type="password" 
@@ -182,14 +182,14 @@ export default function Form() {
                     placeholder="Password" 
                     value={formData.password} 
                     onChange={handleChange}
-                    className={`${!passwordsMatch ? "border-(--red)" : ""}`}
+                    className={`${!passwordsMatch ? "border-(--r)" : ""}`}
                   />
                 </label>
               </div>
 
               <div className={style2}>
                 <label>
-                  <h4>Repeat password</h4>
+                  <h3>Repeat password</h3>
                   <span>Confirm password</span>
                   <input 
                     type="password" 
@@ -197,7 +197,7 @@ export default function Form() {
                     placeholder="Confirmation" 
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className={`${!passwordsMatch ? "border-(--red)" : ""}`}
+                    className={`${!passwordsMatch ? "border-(--r)" : ""}`}
                   />
                 </label>
               </div>

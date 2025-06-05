@@ -8,7 +8,7 @@ export default function Header() {
   const primary = "flex items-center";
 
   return (
-    <header>
+    <header className="flex px-(--qp) bg-(--bl) justify-between">
       <Link href="/">
         <div className={primary}>
           <Logo />
