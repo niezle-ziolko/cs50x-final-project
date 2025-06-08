@@ -97,11 +97,6 @@ export default function Form() {
   const passwordsMatch = !formData.password || formData.password === formData.confirmPassword;
   const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY;
 
-  // CSS utility classes for styling layout
-  const button = "w-(--fp) md:w-40 py-2 px-4";
-  const style = "grid md:flex gap-2.5";
-  const style2 = "md:w-1/2";
-
   return (
     <div>
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
@@ -109,12 +104,12 @@ export default function Form() {
         <Info />
         <form onSubmit={handleSubmit}>
           <div className="notebook">
-            <div className="top-(--n) h-(--fp) left-13 absolute border-l border-(--r)" />
+            <div className="top-0 h-full left-13 absolute border-1 border-(--color-r-100)" />
             <textarea name="message" onChange={handleChange} value={formData.message} placeholder="Enter message here..." required />
           </div>
 
           <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
-            <button className={`${button} mr-(--n) mb-2 bg-(--bl) text-(--g)`} type="submit" disabled={loading}>
+            <button className="u11 mr-0 mb-2 bg-bl-100 text-g-100" type="submit" disabled={loading}>
               {loading ? <Loader /> : "Create note"}
             </button>
 
@@ -127,20 +122,20 @@ export default function Form() {
               />
             </div>
 
-            <button className={`${button} text-(--bl)`} type="button" onClick={() => setShowMenu((prev) => !prev)}>
+            <button className="u11 text-bl-100" type="button" onClick={() => setShowMenu((prev) => !prev)}>
               Settings
             </button>
           </div>
 
           {error && (
-            <div className="mb-6 text-sm text-(--r)">
+            <div className="mb-6 text-sm text-r">
               <strong>Error: {error}</strong>
             </div>
           )}
 
-          <section className={`${showMenu ? "opacity-100" : "mb-(--n) p-(--n) max-h-(--n) opacity-(--n)"}`}>
-            <div className={style}>
-              <div className={style2}>
+          <section className={`${showMenu ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}>
+            <div className="u13">
+              <div className="u14">
                 <label>
                   <h3>Self-destruction of the note</h3>
                   <span>
@@ -156,7 +151,7 @@ export default function Form() {
                 </label>
               </div>
 
-              <div className={style2}>
+              <div className="u14">
                 <label>
                   <h3>Notification of destruction</h3>
                   <span>Email for note destruction notification</span>
@@ -171,8 +166,8 @@ export default function Form() {
               </div>
             </div>
 
-            <div className={style}>
-              <div className={style2}>
+            <div className="u13">
+              <div className="u14">
                 <label>
                   <h3>Set password</h3>
                   <span>Enter your own password to encrypt the note</span>
@@ -182,12 +177,12 @@ export default function Form() {
                     placeholder="Password" 
                     value={formData.password} 
                     onChange={handleChange}
-                    className={`${!passwordsMatch ? "border-(--r)" : ""}`}
+                    className={`${!passwordsMatch ? "border-(--color-r-100)" : ""}`}
                   />
                 </label>
               </div>
 
-              <div className={style2}>
+              <div className="u14">
                 <label>
                   <h3>Repeat password</h3>
                   <span>Confirm password</span>
@@ -197,7 +192,7 @@ export default function Form() {
                     placeholder="Confirmation" 
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className={`${!passwordsMatch ? "border-(--r)" : ""}`}
+                    className={`${!passwordsMatch ? "border-(--color-r-100)" : ""}`}
                   />
                 </label>
               </div>

@@ -9,7 +9,7 @@ export default function Info() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="u15 justify-between">
         <h2>New Note</h2>
         <button
           onClick={() => setShowManual((prev) => !prev)}
@@ -21,7 +21,7 @@ export default function Info() {
         </button>
       </div>
 
-      <section className={`${showManual ? "opacity-100" : "p-(--n) mb-(--n) max-h-(--n) opacity-(--n)"}`}>
+      <section className={`${showManual ? "opacity-100" : "p-0 mb-0 max-h-0 opacity-0"}`}>
         <p>
           Using Enigma, you can send notes that will be automatically destroyed
           after reading.

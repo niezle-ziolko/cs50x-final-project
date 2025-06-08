@@ -2,9 +2,9 @@ import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateCloudflareWorkersHandler } from "@as-integrations/cloudflare-workers";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { typeDefs } from "utils/schema";
-import { resolvers } from "utils/resolvers";
-import { bearerHeader } from "utils/headers";
+import { typeDefs } from "../utils/schema";
+import { resolvers } from "../utils/resolvers";
+import { bearerHeader } from "../utils/headers";
 
 // Creating the GraphQL schema
 const schema = makeExecutableSchema({

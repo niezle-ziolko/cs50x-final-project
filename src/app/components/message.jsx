@@ -195,9 +195,6 @@ export default function Message() {
 
   const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY;
   
-  // CSS utility classes for styling layout
-  const button = "w-(--fp) md:w-40 py-2 px-4";
-  
   return (
     <div>
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
@@ -207,7 +204,7 @@ export default function Message() {
 
       <div>
         <div className="notebook">
-          <div className="top-(--n) h-(--fp) left-13 absolute border-l border-(--r)" />
+          <div className="top-0 h-full left-13 absolute border-1 border-(--color-r-100)" />
           <textarea 
             readOnly 
             name="message" 
@@ -220,7 +217,7 @@ export default function Message() {
           <button
             onClick={handleDelete} 
             disabled={loading || deleting || passwordRequired}
-            className={`${button} mr-(--n) mb-2 bg-(--bl) text-(--g)`} 
+            className="u11 mr-0 mb-2 bg-bl-100 text-g-100"
           >
             {(loading || deleting) ? <Loader /> : "Delete note"}
           </button>
@@ -238,7 +235,7 @@ export default function Message() {
             <button
               type="button"
               onClick={() => router.push("/")}
-              className={`${button} text-(--bl)`}
+              className="u11 text-bl-100"
             >
               New notate
             </button>
@@ -246,7 +243,7 @@ export default function Message() {
         </div>
 
         {error || passwordError && (
-          <div className="mb-(--oh) text-sm text-(--r)">
+          <div className="mb-6 text-sm text-r">
             <strong>Error: {error || passwordError}</strong>
           </div>
         )}
@@ -254,7 +251,7 @@ export default function Message() {
         {/* Password form - shown only when required */}
         <section 
           ref={passwordSectionRef}
-          className={`${passwordRequired ? "opacity-100" : "mb-(--n) p-(--n) max-h-(--n) opacity-(--n)"}`}
+          className={`${passwordRequired ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}
         >
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
@@ -268,7 +265,7 @@ export default function Message() {
                   onChange={(e) => setPasswordInput(e.target.value)}
                   placeholder="Password..."
                   disabled={verifyingPassword}
-                  className={passwordError ? "border-(--r)" : ""}
+                  className={passwordError ? "border-(--color-r-100)" : ""}
                 />
               </label>
             </div>
@@ -277,7 +274,7 @@ export default function Message() {
               <button
                 type="submit"
                 disabled={verifyingPassword || !passwordInput}
-                className="w-(--fp) py-2 px-4 bg-(--bl) text-(--g)"
+                className="w-full py-2 px-4 bg-bl-100 text-g-100"
               >
                 {verifyingPassword ? <Loader /> : "Verify password"}
               </button>

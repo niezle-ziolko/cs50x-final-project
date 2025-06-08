@@ -5,17 +5,15 @@ import ThemeButton from "./buttons/theme-button";
 import Logo from "styles/icons/logo";
 
 export default function Header() {
-  const primary = "flex items-center";
-
   return (
-    <header className="flex px-(--qp) bg-(--bl) justify-between">
+    <header className="flex md:px-qp bg-bl-100 justify-between">
       <Link href="/">
-        <div className={primary}>
+        <div className="u15">
           <Logo />
           <h1>Enigma</h1>
         </div>
       </Link>
-      <div className={primary}>
+      <div className="u15">
         <ThemeButton />
       </div>
     </header>

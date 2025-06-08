@@ -36,23 +36,20 @@ export default function Copy() {
     };
   };
 
-  // CSS utility classes for styling layout
-  const button = "w-(--fp) md:w-40 py-2 px-4 mr-(--n) mb-2";
-
   return (
-    <div className="mt-(--oh) mb-6">
+    <div className="mt-6 mb-6">
       <section>
         <p>Your note is ready!</p>
       </section>
 
       <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
-        <button className={`${button} bg-(--bl) text-(--g)`} onClick={handleCopy}>
+        <button className="u11 mr-0 mb-2 bg-bl-100 text-g-100" onClick={handleCopy}>
           {copied ? "Copied!" : "Copy"}
         </button>
 
         <button
           onClick={handleViewMessage}
-          className={`${button} text-(--bl)`}
+          className="u11 text-bl-100"
         >
           View Message
         </button>
@@ -60,7 +57,7 @@ export default function Copy() {
         <button
           type="button"
           onClick={() => router.push("/")}
-          className={`${button} text-(--bl)`}
+          className="u11 text-bl-100"
         >
           New notate
         </button>
