@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
       <body className={`${oxygen.variable} ${comicRelief.variable}`}>
         <ThemeProvider>
           <Header />
-          <main className="md:px-qp">
+          <main className="md:px-qp px-2">
             {children}
           </main>
           <Footer />

@@ -3,7 +3,7 @@ import GithubIcon from "styles/icons/github";
 
 export default function Footer() {
   return (
-    <footer className="u1 align-center mb-4 md:mx-qp border-t-2 border-t-bl-100">
+    <footer className="u1 align-center mb-4 md:mx-qp mx-2 border-t-2 border-t-bl-100">
       <h4>Your secure messenger for creating one-time encrypted messages.</h4>
       <Lock />
       <aside className="github">

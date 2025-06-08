@@ -217,7 +217,7 @@ export default function Message() {
           <button
             onClick={handleDelete} 
             disabled={loading || deleting || passwordRequired}
-            className="u11 mr-0 mb-2 bg-bl-100 text-g-100"
+            className="u11 bg-bl-100 text-g-100"
           >
             {(loading || deleting) ? <Loader /> : "Delete note"}
           </button>

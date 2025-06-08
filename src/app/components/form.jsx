@@ -109,7 +109,7 @@ export default function Form() {
           </div>
 
           <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
-            <button className="u11 mr-0 mb-2 bg-bl-100 text-g-100" type="submit" disabled={loading}>
+            <button className="u11 bg-bl-100 text-g-100" type="submit" disabled={loading}>
               {loading ? <Loader /> : "Create note"}
             </button>
 
