@@ -11,7 +11,7 @@
 		"deploy": "opennextjs-cloudflare deploy",
 		"preview": "opennextjs-cloudflare preview",
 		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
-		"db": "wrangler d1 execute cs50 --local --file=./database/schema.sql"
+		"db": "wrangler d1 execute cs50 --file=./database/schema.sql"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.13.8",
