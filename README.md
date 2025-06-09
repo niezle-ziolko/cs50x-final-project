@@ -1,36 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CS50x Project 5 - Final Project
 
-## Getting Started
+## Distinctiveness and Complexity
 
-First, run the development server:
+**Enigma** stands out as a unique project due to its focus on privacy-first note sharing, built entirely with modern web technologies such as **Cloudflare Workers**, **GraphQL**, and **JWT-based encryption**. Unlike typical note-sharing applications, **Enigma** introduces advanced features that let users limit how many times a note can be viewed (1–5 times) and optionally protect it with a password. Users can also supply their email to receive a notification once the note self-destructs.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+At the core of **Enigma** is the **zero-knowledge model**: even administrators cannot access the contents of a note, thanks to the use of encrypted JSON Web Tokens (JWTs). This ensures a high level of data confidentiality.
+
+The application was built using Next.js for the frontend, **Cloudflare Workers** for the backend, and D1 as the embedded SQL database. All communication between client and server happens over GraphQL, using `@apollo/client` and `@apollo/server`. Tailwind CSS was used to create a clean, responsive UI.
+
+**Key technical challenges** I overcame included:
+  - Implementing JWT-based encrypted note payloads that work serverlessly.
+  - Setting up a GraphQL API inside Cloudflare Workers that communicates securely with D1.
+  - Handling rate-limited view counters with automatic deletion.
+  - Sending transactional emails through Brevo's SMTP API via Workers.
+  - Ensuring security and scalability, even without traditional backend servers.
+
+These complexities, combined with the privacy-first approach and modern stack, make **Enigma** a distinctive, technically challenging, and relevant project.
+
+## File Descriptions
+
+```
+  cs50-final-project/
+  ├── .eslintrc.json
+  ├── .gitignore
+  ├── jsconfig.json
+  ├── LICENSE
+  ├── next.config.mjs
+  ├── open-next.config.ts
+  ├── package.json
+  ├── pnpm-lock.yaml
+  ├── postcss.config.mjs
+  ├── wrangler.jsonc                    # A file containing settings for the Cloudflare Workers service such as environment variables.
+  ├── .vscode/
+  │   └── settings.json
+  ├── database/
+  │   └── schema.sql
+  ├── public/                           # Public files
+  │   ├── _headers
+  │   ├── _redirects
+  │   └── logo.svg
+  └── src/                              # Source files
+      ├── lib/                          # Folder with files that add additional features to the application
+      │   └── env.js                    # Script to load all environment variables in the application frontend
+      └── app/                          # Main application folder
+          ├── favicon.ico               # Favicon icon
+          ├── layout.js                 # Layout file
+          ├── not-found.js              # Not found page
+          ├── page.js                   # Main page
+          ├── utils.js                  # Utils frontend file
+          ├── api/                      # A folder to create a backend for the application.
+          │   ├── Sf19GHAdWc/
+          │   │   └── route.js
+          │   └── utils/
+          │       ├── headers.js
+          │       ├── resolvers.js
+          │       ├── schema.js
+          │       └── utils.js
+          ├── client/
+          │   ├── client.js
+          │   ├── mutation.js
+          │   └── query.js
+          ├── components/
+          │   ├── copy.jsx
+          │   ├── footer.jsx
+          │   ├── form.jsx
+          │   ├── header.jsx
+          │   ├── info.jsx
+          │   ├── loader.jsx
+          │   ├── message.jsx
+          │   └── buttons/
+          │        └── theme-button.jsx
+          ├── context/
+          │   └── theme-context.jsx
+          ├── created/
+          │   └── page.jsx
+          ├── notate/
+          │   └── page.jsx
+          └── notate/
+              └── page.jsx
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Features
+- **Secure Notes with Expiry**
+  Users can create notes that self-destruct after a configurable number of views (1–5). This functionality is enforced by Cloudflare D1 and validated via the GraphQL API.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **Password Protection (Optional)**
+  Notes can be optionally protected by a password. The decryption happens client-side using information embedded in the token.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Email Notifications via Brevo**
+  When an email is provided, Enigma will notify the user once the note is deleted (after the last view).
 
-## Learn More
+- **JWT Encryption for Privacy**
+  Each note is encoded as an encrypted JWT. All sensitive data is stored encrypted, even within the database. Only the client with the correct token can decrypt and view it.
 
-To learn more about Next.js, take a look at the following resources:
+- **GraphQL API on Cloudflare Workers**
+  All data operations (create, fetch, delete) are handled via a secure GraphQL API using @apollo/server.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Modern Frontend with Tailwind CSS + Next.js**
+  The UI is built with modern design principles using Tailwind for speed and responsiveness.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Demo
 
-## Deploy on Vercel
+Demo site available on: https://enigma.niezle-ziolko.workers.dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Example Workflow
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Create a Note**
+  - Visit homepage
+  - Fill in note content
+  - Optionally set view limit (1–5), password, or email
+  - Click **Create note** button
+
+2. **Receive a Link**
+  - After creation, you’ll get a link like: `https://enigma.niezle-ziolko.workers.dev/notate?=eyJhbGciOi...`
+  - Accessing a Note
+  - Open the link
+  - If password-protected, enter the password
+  - View the note (each view reduces the counter)
+
+3. **Note Expiry**
+  - After max views, note is deleted from the D1 database
+  - If email was provided, a notification is sent
+
+## Technologies Used
+  - **Frontend**
+    - Next.js (React-based framework)
+    - Tailwind CSS
+    - Apollo Client
+
+  - **Backend**
+    - Cloudflare Workers
+    - GraphQL with Apollo Server
+    - Cloudflare D1 (SQLite-based edge database)
+
+  - **Other**
+    - JWT (for encrypted token generation)
+    - Brevo (formerly Sendinblue) for transactional email
+    - TypeScript

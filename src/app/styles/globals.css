@@ -122,7 +122,7 @@
 }
 
 @utility u11 {
-  @apply w-full md:w-40 py-2 px-4;
+  @apply w-full md:w-40 py-2 px-4 mr-0;
 }
 
 @utility u12 {
