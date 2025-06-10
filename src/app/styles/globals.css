@@ -204,7 +204,7 @@
   }
 
   button {
-    @apply u1 cursor-pointer border-2 border-bl-100 font-bold rounded-sm mr-0 mb-2;
+    @apply u1 cursor-pointer border-2 border-bl-100 font-bold rounded-sm mr-0 mb-2 md:mb-0;
   }
 }
 

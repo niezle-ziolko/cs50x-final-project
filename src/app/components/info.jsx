@@ -13,7 +13,7 @@ export default function Info() {
         <h2>New Note</h2>
         <button
           onClick={() => setShowManual((prev) => !prev)}
-          className="p-0.5 bg-transparent"
+          className="p-0.5 bg-transparent mb-0"
           aria-expanded={showManual}
           aria-controls="manual-content"
         >
