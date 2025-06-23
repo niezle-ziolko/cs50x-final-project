@@ -15,7 +15,7 @@ export default function Info() {
           onClick={() => setShowManual((prev) => !prev)}
           className="p-0.5 bg-transparent mb-0"
           aria-expanded={showManual}
-          aria-controls="manual-content"
+          aria-label="manual-content"
         >
           <QuestionMark />
         </button>
