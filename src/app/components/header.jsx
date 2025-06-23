@@ -6,7 +6,7 @@ import Logo from "styles/icons/logo";
 
 export default function Header() {
   return (
-    <header className="flex md:px-qp px-2 bg-bl-100 justify-between">
+    <header className="flex md:px-qp px-2 bg-third justify-between">
       <Link href="/">
         <div className="u15">
           <Logo />

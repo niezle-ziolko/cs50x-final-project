@@ -3,21 +3,20 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @variant dark {
-  --color-primary: oklch(0.9071 0.0215 259.19);
-  --color-secondary: oklch(0.329 0 0);
+  --color-primary: oklch(1 0 0);
+  --color-secondary: oklch(0 0 0);
 }
 
 @theme {
-  --color-primary: oklch(0.329 0 0);
-  --color-secondary: oklch(0.9071 0.0215 259.19);
+  --color-primary: oklch(0 0 0);
+  --color-secondary: oklch(1 0 0);
+  --color-third: oklch(0.5768 0.1683 280.52);
+  --color-quarternary: oklch(0.6913 0.1597 240.5349);
 
   --color-b-100: oklch(0.329 0 0);
   --color-b-200: oklch(0.2046 0 0);
 
-  --color-r-100: oklch(0.5274 0.1751 25.55);
-
-  --color-bl-100: oklch(0.6562 0.1895 251);
-  --color-bl-200: oklch(0.5472 0.1966 258.23);
+  --color-r-100: oklch(0.5618 0.2087 27.26);
 
   --color-g-100: oklch(0.9071 0.0215 259.19);
   --color-g-200: oklch(0.6764 0 0);
@@ -145,6 +144,10 @@
   @apply text-primary font-bold h-126;
 }
 
+@utility u17 {
+  @apply flex flex-col items-center;
+}
+
 @layer base {
   body {
     @apply max-w-screen m-0 overflow-x-hidden transition-(--transition) bg-secondary font-(family-name:--primary-font-family);
@@ -163,7 +166,7 @@
   }
 
   h4 {
-    @apply text-bl-100 md:text-base text-xs mt-s text-center font-bold;
+    @apply text-third md:text-base text-xs mt-s text-center font-bold;
   }
 
   a {
@@ -184,7 +187,7 @@
 
   input,
   select {
-    @apply h-10 p-2 text-sm text-primary border-2 border-bl-100 outline-none rounded-md bg-transparent;
+    @apply h-10 p-2 text-sm text-primary border-2 border-third outline-none rounded-md bg-transparent;
   }
 
   option{
@@ -200,11 +203,11 @@
   }
 
   section {
-    @apply p-4 overflow-hidden max-h-125 text-primary border-2 border-bl-100 mb-5 rounded-md transition-(--transition);
+    @apply p-4 overflow-hidden max-h-125 text-primary border-2 border-third mb-5 rounded-md transition-(--transition);
   }
 
   button {
-    @apply u1 cursor-pointer border-2 border-bl-100 font-bold rounded-sm mr-0 mb-2 md:mb-0;
+    @apply u1 cursor-pointer border-2 border-third font-bold rounded-sm mr-0 mb-2 md:mb-0;
   }
 }
 

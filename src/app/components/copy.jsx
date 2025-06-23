@@ -43,13 +43,13 @@ export default function Copy() {
       </section>
 
       <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
-        <button className="u11 bg-bl-100 text-g-100" onClick={handleCopy}>
+        <button className="u11 bg-third text-white" onClick={handleCopy}>
           {copied ? "Copied!" : "Copy"}
         </button>
 
         <button
           onClick={handleViewMessage}
-          className="u11 text-bl-100"
+          className="u11 text-third"
         >
           View Message
         </button>
@@ -57,7 +57,7 @@ export default function Copy() {
         <button
           type="button"
           onClick={() => router.push("/")}
-          className="u11 text-bl-100"
+          className="u11 text-third"
         >
           New notate
         </button>

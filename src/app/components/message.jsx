@@ -214,11 +214,7 @@ export default function Message() {
         </div>
 
         <div className="mb-6 grid md:flex md:h-15 space-x-4 items-center md:justify-between">
-          <button
-            onClick={handleDelete} 
-            disabled={loading || deleting || passwordRequired}
-            className="u11 bg-bl-100 text-g-100"
-          >
+          <button className="u11 bg-third text-white" onClick={handleDelete} disabled={loading || deleting || passwordRequired}>
             {(loading || deleting) ? <Loader /> : "Delete note"}
           </button>
 
@@ -232,11 +228,7 @@ export default function Message() {
           </div>
 
           <div className="md:w-40 md:h-15">
-            <button
-              type="button"
-              onClick={() => router.push("/")}
-              className="u11 text-bl-100"
-            >
+            <button className="u11 text-third" type="button" onClick={() => router.push("/")}>
               New notate
             </button>
           </div>
@@ -249,10 +241,7 @@ export default function Message() {
         )}
 
         {/* Password form - shown only when required */}
-        <section 
-          ref={passwordSectionRef}
-          className={`${passwordRequired ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}
-        >
+        <section ref={passwordSectionRef} className={`${passwordRequired ? "opacity-100" : "mb-0 p-0 max-h-0 opacity-0"}`}>
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
               <label htmlFor="password">
@@ -271,11 +260,7 @@ export default function Message() {
             </div>
             
             <div className="p-2">
-              <button
-                type="submit"
-                disabled={verifyingPassword || !passwordInput}
-                className="w-full py-2 px-4 bg-bl-100 text-g-100"
-              >
+              <button className="w-full py-2 px-4 bg-third text-white" type="submit" disabled={verifyingPassword || !passwordInput}>
                 {verifyingPassword ? <Loader /> : "Verify password"}
               </button>
             </div>
