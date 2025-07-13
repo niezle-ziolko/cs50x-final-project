@@ -38,6 +38,6 @@
 	    "NEXT_PUBLIC_SITE_KEY": "0x4AAAAAAA8CytbRsD_4tmim",
 	    "NEXT_PUBLIC_JWT_SECRET": "0joBg09Ui2ykIacUW1iB8fi8kQRS3NQR",
 	    "NODE_VERSION": "24.1.0",
-        "PNPM_VERSION": "10.12.1"
+        "PNPM_VERSION": "10.12.4"
 	}
 }
