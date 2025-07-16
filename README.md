@@ -246,5 +246,9 @@ Below are the core GraphQL operations used in the Enigma app to manage encrypted
 ---
 
 ## 🎥 Demo
+
 You can view a working version of the project here:
 👉 https://enigma.wgwcompany.workers.dev/
+
+Video walkthrough of the specification:
+🎥 https://youtu.be/jDPhSrNDSfg

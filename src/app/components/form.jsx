@@ -127,7 +127,7 @@ export default function Form() {
           </div>
 
           {error && (
-            <div className="mb-6 text-sm text-r">
+            <div className="mb-6 text-sm text-r-100">
               <strong>Error: {error}</strong>
             </div>
           )}
