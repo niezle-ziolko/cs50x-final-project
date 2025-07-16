@@ -121,7 +121,7 @@ The project structure is based on Next.js application with Cloudflare integratio
   - Click **Create note** button
 
 2. **Receive a Link**
-  - After creation, you’ll get a link like: `https://enigma.niezle-ziolko.workers.dev/notate?=eyJhbGciOi...`
+  - After creation, you’ll get a link like: `https://enigma.wgwcompany.workers.dev/notate?=eyJhbGciOi...`
   - Accessing a Note
   - Open the link
   - If password-protected, enter the password
@@ -152,17 +152,17 @@ The project structure is based on Next.js application with Cloudflare integratio
 ## 🧩 Tech Stack & Dependencies
 To run the application, make sure you have the following dependencies installed:
   ```json
-  "@apollo/client": "^3.13.8",
-	"@apollo/server": "^4.12.2",
-	"@as-integrations/cloudflare-workers": "^1.1.1",
-	"@graphql-tools/schema": "^10.0.23",
-	"@opennextjs/cloudflare": "^1.2.1",
-	"graphql": "^16.11.0",
-	"jose": "^6.0.11",
-	"next": "15.3.3",
-	"react": "^19.1.0",
-	"react-dom": "^19.1.0",
-	"uuid": "^11.1.0"
+  {
+    "next": "15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-lottie": "^1.2.10",
+    "@opennextjs/cloudflare": "^1.5.1",
+    "@as-integrations/cloudflare-workers": "^1.1.1",
+    "@apollo/client": "^3.13.8",
+    "@apollo/server": "^4.12.2",
+    "graphql": "^16.11.0"
+  }
   ```
 
 To install all dependencies, run:
@@ -247,4 +247,4 @@ Below are the core GraphQL operations used in the Enigma app to manage encrypted
 
 ## 🎥 Demo
 You can view a working version of the project here:
-👉 https://enigma.niezle-ziolko.workers.dev/
+👉 https://enigma.wgwcompany.workers.dev/
