@@ -252,3 +252,10 @@ You can view a working version of the project here:
 
 Video walkthrough of the specification:
 🎥 https://youtu.be/jDPhSrNDSfg
+
+## 📜 Certification
+
+This project was submitted as part of the CS50x including ten problem sets and one final project.
+Upon successful completion, I was awarded a certificate, which is available here:
+
+🎓 [View Certificate](https://certificates.cs50.io/5a0d47b5-d702-41c1-955d-087b0f25129c.pdf)
